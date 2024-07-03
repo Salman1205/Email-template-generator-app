@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Template Generator</title>
+    <style>
+        /* Your CSS styles here */
+        #result {
+            margin-top: 20px;
+            display: none;
+        }
+        #loading {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        #loading .spinner {
+            width: 30px;
+            height: 30px;
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top-color: #007bff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Email Template Generator</h1>
+    <form id="emailForm" method="POST" action="/query">
+        <label for="query">User's Query:</label>
+        <textarea id="query" name="query" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Generate Email Template">
+    </form>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Generating email template...</p>
+    </div>
+
+    <div id="result">
+        <h2>Generated Email Template</h2>
+        <p><strong>Subject:</strong> <span id="subject"></span></p>
+        <p><strong>Promotion Line:</strong> <span id="promo"></span></p>
+        <p><strong>Description:</strong> <span id="description"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('emailForm').onsubmit = async function (event) {
+            event.preventDefault();
+
+            // Show the loading animation
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+
+            const formData = new FormData(this);
+            const response = await fetch('/query', {
+                method: 'POST',
+                body: formData
+            });
+
+            try {
+                const result = await response.json();
+                console.log("Result from server:", result);
+
+                if (result.subject && result.promo && result.description) {
+                    // Update the HTML elements with the generated content
+                    document.getElementById('subject').textContent = result.subject;
+                    document.getElementById('promo').textContent = result.promo;
+                    document.getElementById('description').textContent = result.description;
+
+                    // Display the result section
+                    document.getElementById('result').style.display = 'block';
+                } else {
+                    // Display an error message if any of the fields are missing
+                    document.getElementById('result').style.display = 'none';
+                    alert('Failed to generate email template. Please try again.');
+                }
+
+            } catch (error) {
+                console.error("Error parsing response:", error);
+                alert('An error occurred. Please try again later.');
+            }
+
+            // Hide the loading animation after processing
+            document.getElementById('loading').style.display = 'none';
+        };
+    </script>
+</body>
+</html>
