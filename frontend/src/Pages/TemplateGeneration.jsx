@@ -7,6 +7,7 @@ import shoe from "../Media/shoe.jfif"
 const TemplateGeneration = () => {
 
   const prompt = useRef(null);
+  const [urlForShop, setUrlFromShop] = useState(null);
 
   const [result, setResult] = useState({
     description: "",
@@ -46,7 +47,7 @@ const TemplateGeneration = () => {
 
   const handleGetFromCollab = () => {
     console.log("fetching with prompt: ", prompt.current.value);
-    fetch(`https://f59b-34-143-143-231.ngrok-free.app/get-image/${prompt.current.value}`, {
+    fetch(`https://217b-34-143-143-231.ngrok-free.app/get-image/${prompt.current.value}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +94,11 @@ const TemplateGeneration = () => {
             accept="image/*" 
             onChange={handleImg}  
           />
-          <button onClick={() => {handleGetFromCollab(); handleSendPrompt();}} >Send to Server</button>
+          <label htmlFor="urlinput">Enter the url:</label>
+          <input name = "urlinput"type="text" value={urlForShop} onChange={(event) => {
+            setUrlFromShop(event.target.value);
+          }}/>
+          <button onClick={() => {setImageFromCollab(null);  handleGetFromCollab(); handleSendPrompt();}} >Send to Server</button>
         </div>
 
 
@@ -112,47 +117,60 @@ const TemplateGeneration = () => {
             )
           } */}
 
-          <div className="email-container">
-          <div className="banner_header">
-              <h1>{result.subject}</h1>
+          {
+            imageFromCollab && (
+              <>
+              <div className="email-container">
+            <div className="banner_header">
+                <h1>{result.subject}</h1>
+            </div>
+            <div className="banner_main">
+                <img 
+                  src={`data:image/png;base64,${imageFromCollab}`}
+                  alt="Fetched from Flask server" 
+                />
+                <h2>{result.promo}</h2>
+                <p>{result.description}</p>
+                <a href={urlForShop} className="button">Shop Now</a>
+            </div>
+            <div className="footer">
+                <p>Follow us on:</p>
+                <a href="your-facebook-link">Facebook</a> |
+                <a href="your-twitter-link">Twitter</a> |
+                <a href="your-instagram-link">Instagram</a>
+                <p>&copy; 2024 BATA. All rights reserved.</p>
+            </div>
           </div>
-          <div className="banner_main">
-              <img 
-                src={`data:image/png;base64,${imageFromCollab}`}
-                alt="Fetched from Flask server" 
-              />
-              <h2>{result.promo}</h2>
-              <p>{result.description}</p>
-              <a href="your-website-link" className="button">Shop Now</a>
-          </div>
-          <div className="footer">
-              <p>Follow us on:</p>
-              <a href="your-facebook-link">Facebook</a> |
-              <a href="your-twitter-link">Twitter</a> |
-              <a href="your-instagram-link">Instagram</a>
-              <p>&copy; 2024 BATA. All rights reserved.</p>
-          </div>
+          <div className="banner2-email-container">
+            <div className="hero">
+                <img 
+                  src={`data:image/png;base64,${imageFromCollab}`}
+                  alt="Fetched from Flask server"
+                  className="banner2-hero-image" 
+                />
+                <div className="banner2-hero-overlay"></div>
+                <div className="banner2-hero-content">
+                    <h1>{result.subject}</h1>
+                </div>
+            </div>
+            <div className="banner2-main">
+                <h2>{result.promo}</h2>
+                <p>{result.description}</p>
+                <a href={"nothing" || urlForShop} className="banner2-button">Shop Now</a>
+            </div>
+            <div className="banner2-footer">
+                <p>Connect with us:</p>
+                <a href="your-facebook-link">Facebook</a> |
+                <a href="your-twitter-link">Twitter</a> |
+                <a href="your-instagram-link">Instagram</a>
+                <p>&copy; 2024 WadiyaShoes. All rights reserved.</p>
+            </div>
         </div>
-        <div class="banner2-email-container">
-          <div class="banner2-hero">
-              <div class="banner2-hero-overlay"></div>
-              <div class="banner2-hero-content">
-                  <h1>{result.subject}</h1>
-              </div>
-          </div>
-          <div class="banner2-main">
-              <h2>{result.promo}</h2>
-              <p>{result.description}</p>
-              <a href="your-website-link" class="button">Shop Now</a>
-          </div>
-          <div class="banner2-footer">
-              <p>Connect with us:</p>
-              <a href="your-facebook-link">Facebook</a> |
-              <a href="your-twitter-link">Twitter</a> |
-              <a href="your-instagram-link">Instagram</a>
-              <p>&copy; 2024 [Your Shoes Brand]. All rights reserved.</p>
-          </div>
-        </div>
+              </>
+            )
+          }
+
+          
       </div>
 
 
