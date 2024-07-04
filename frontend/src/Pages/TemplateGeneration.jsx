@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import "../Css/templateGeneration.css"
-import "../Css/banner.css"
+import "../Css/banner1.css"
+import "../Css/banner2.css"
 import shoe from "../Media/shoe.jfif"
 
 const TemplateGeneration = () => {
@@ -29,7 +30,7 @@ const TemplateGeneration = () => {
       "query": prompt.current.value,
     }
     console.log(Obj);
-    fetch("/query", {
+    fetch("http://127.0.0.1:5000/query", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ const TemplateGeneration = () => {
 
   const handleGetFromCollab = () => {
     console.log("fetching with prompt: ", prompt.current.value);
-    fetch(`https://3c4a-34-83-208-201.ngrok-free.app/get-image/${prompt.current.value}`, {
+    fetch(`https://f59b-34-143-143-231.ngrok-free.app/get-image/${prompt.current.value}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ const TemplateGeneration = () => {
             accept="image/*" 
             onChange={handleImg}  
           />
-          <button onClick={handleSendPrompt} >Send to Server</button>
+          <button onClick={() => {handleGetFromCollab(); handleSendPrompt();}} >Send to Server</button>
         </div>
 
 
@@ -116,7 +117,10 @@ const TemplateGeneration = () => {
               <h1>{result.subject}</h1>
           </div>
           <div className="banner_main">
-              <img src={shoe} alt="Shoes Banner" />
+              <img 
+                src={`data:image/png;base64,${imageFromCollab}`}
+                alt="Fetched from Flask server" 
+              />
               <h2>{result.promo}</h2>
               <p>{result.description}</p>
               <a href="your-website-link" className="button">Shop Now</a>
@@ -129,13 +133,28 @@ const TemplateGeneration = () => {
               <p>&copy; 2024 BATA. All rights reserved.</p>
           </div>
         </div>
-
-        <img 
-          src={`data:image/png;base64,${imageFromCollab}`}
-          alt="Fetched from Flask server" 
-        />
-        <button onClick={handleGetFromCollab} >get image</button>
+        <div class="banner2-email-container">
+          <div class="banner2-hero">
+              <div class="banner2-hero-overlay"></div>
+              <div class="banner2-hero-content">
+                  <h1>{result.subject}</h1>
+              </div>
+          </div>
+          <div class="banner2-main">
+              <h2>{result.promo}</h2>
+              <p>{result.description}</p>
+              <a href="your-website-link" class="button">Shop Now</a>
+          </div>
+          <div class="banner2-footer">
+              <p>Connect with us:</p>
+              <a href="your-facebook-link">Facebook</a> |
+              <a href="your-twitter-link">Twitter</a> |
+              <a href="your-instagram-link">Instagram</a>
+              <p>&copy; 2024 [Your Shoes Brand]. All rights reserved.</p>
+          </div>
+        </div>
       </div>
+
 
       </div>
     </div>
