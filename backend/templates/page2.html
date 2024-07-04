@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Template Generator</title>
     <style>
-        /* Your CSS styles here */
         #result {
             margin-top: 20px;
             display: none;
@@ -31,9 +31,22 @@
 </head>
 <body>
     <h1>Email Template Generator</h1>
-    <form id="emailForm" method="POST" action="/query">
+    <form id="emailForm">
         <label for="query">User's Query:</label>
         <textarea id="query" name="query" rows="4" cols="50"></textarea><br>
+
+        <label for="website">Website URL:</label>
+        <input type="url" id="website" name="website"><br>
+
+        <label for="facebook">Facebook URL:</label>
+        <input type="url" id="facebook" name="facebook"><br>
+
+        <label for="twitter">Twitter URL:</label>
+        <input type="url" id="twitter" name="twitter"><br>
+
+        <label for="instagram">Instagram URL:</label>
+        <input type="url" id="instagram" name="instagram"><br>
+
         <input type="submit" value="Generate Email Template">
     </form>
 
@@ -47,13 +60,16 @@
         <p><strong>Subject:</strong> <span id="subject"></span></p>
         <p><strong>Promotion Line:</strong> <span id="promo"></span></p>
         <p><strong>Description:</strong> <span id="description"></span></p>
+        <p><strong>Website URL:</strong> <span id="websiteResult"></span></p>
+        <p><strong>Facebook URL:</strong> <span id="facebookResult"></span></p>
+        <p><strong>Twitter URL:</strong> <span id="twitterResult"></span></p>
+        <p><strong>Instagram URL:</strong> <span id="instagramResult"></span></p>
     </div>
 
     <script>
         document.getElementById('emailForm').onsubmit = async function (event) {
             event.preventDefault();
 
-            // Show the loading animation
             document.getElementById('loading').style.display = 'block';
             document.getElementById('result').style.display = 'none';
 
@@ -67,16 +83,17 @@
                 const result = await response.json();
                 console.log("Result from server:", result);
 
-                if (result.subject && result.promo && result.description) {
-                    // Update the HTML elements with the generated content
+                if (result.subject && result.promo && result.description && result.website && result.facebook && result.twitter && result.instagram) {
                     document.getElementById('subject').textContent = result.subject;
                     document.getElementById('promo').textContent = result.promo;
                     document.getElementById('description').textContent = result.description;
+                    document.getElementById('websiteResult').textContent = result.website;
+                    document.getElementById('facebookResult').textContent = result.facebook;
+                    document.getElementById('twitterResult').textContent = result.twitter;
+                    document.getElementById('instagramResult').textContent = result.instagram;
 
-                    // Display the result section
                     document.getElementById('result').style.display = 'block';
                 } else {
-                    // Display an error message if any of the fields are missing
                     document.getElementById('result').style.display = 'none';
                     alert('Failed to generate email template. Please try again.');
                 }
@@ -86,7 +103,6 @@
                 alert('An error occurred. Please try again later.');
             }
 
-            // Hide the loading animation after processing
             document.getElementById('loading').style.display = 'none';
         };
     </script>
