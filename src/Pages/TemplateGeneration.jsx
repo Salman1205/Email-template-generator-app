@@ -31,7 +31,7 @@ const TemplateGeneration = () => {
       "query": prompt.current.value,
     }
     console.log(Obj);
-    fetch("http://127.0.0.1:5000/query", {
+    fetch("https://ideal-wildly-cat.ngrok-free.app/query", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
