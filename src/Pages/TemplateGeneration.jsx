@@ -47,7 +47,7 @@ const TemplateGeneration = () => {
 
   const handleGetFromCollab = () => {
     console.log("fetching with prompt: ", prompt.current.value);
-    fetch(`https://217b-34-143-143-231.ngrok-free.app/get-image/${prompt.current.value}`, {
+    fetch(`https://smart-central-marten.ngrok-free.app/get-image/${prompt.current.value}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
