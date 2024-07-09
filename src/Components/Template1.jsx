@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import "../Css/banner1.css"
 
-const template1 = ({ result }) => {
+const Template1 = ({ result }) => {
 
-  const [url, setUrl] = useState(null);
+    const [url, setUrl] = useState(null);
 
   return (
     <div className="email-container">
@@ -30,4 +30,4 @@ const template1 = ({ result }) => {
   )
 }
 
-export default template1
+export default Template1
