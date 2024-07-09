@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "../Css/banner1.css"
 
 const template1 = ({ result }) => {
+
+  const [url, setUrl] = useState(null);
+
   return (
     <div className="email-container">
         <div className="banner_header">
@@ -14,7 +17,7 @@ const template1 = ({ result }) => {
             />
             <h2>{result.promo}</h2>
             <p>{result.description}</p>
-            <a href="" className="button">Shop Now</a>
+            <a href={url} className="button">Shop Now</a>
         </div>
         <div className="footer">
             <p>Follow us on:</p>
