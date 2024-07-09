@@ -1,5 +1,5 @@
 {
-  "homepage": "https://MTahaCode.github.io/EmailTemplateProject",
+  "homepage": "https://salman1205.github.io/Email-template-generator-app/",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
@@ -19,7 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build" 
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
