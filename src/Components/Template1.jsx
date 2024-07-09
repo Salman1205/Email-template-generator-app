@@ -9,7 +9,7 @@ const template1 = ({ result }) => {
         </div>
         <div className="banner_main">
             <img 
-            src={result.imgUrl}
+            src={result.image_url}
             alt="Fetched from Flask server" 
             />
             <h2>{result.promo}</h2>
