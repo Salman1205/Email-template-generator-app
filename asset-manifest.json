@@ -1,16 +1,18 @@
 {
   "files": {
-    "main.css": "/Email-template-generator-app/static/css/main.27da8561.css",
-    "main.js": "/Email-template-generator-app/static/js/main.04494311.js",
+    "main.css": "/Email-template-generator-app/static/css/main.12702c19.css",
+    "main.js": "/Email-template-generator-app/static/js/main.f124d3a5.js",
     "static/js/453.8ab44547.chunk.js": "/Email-template-generator-app/static/js/453.8ab44547.chunk.js",
-    "static/media/logo.svg": "/Email-template-generator-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/sample.png": "/Email-template-generator-app/static/media/sample.1c72ff4485255ca09737.png",
+    "static/media/stayaLogo.jpeg": "/Email-template-generator-app/static/media/stayaLogo.fad85003d6cfcf6afd3a.jpeg",
+    "static/media/dummy.jfif": "/Email-template-generator-app/static/media/dummy.ad6b7be9b46bc55f0c13.jfif",
     "index.html": "/Email-template-generator-app/index.html",
-    "main.27da8561.css.map": "/Email-template-generator-app/static/css/main.27da8561.css.map",
-    "main.04494311.js.map": "/Email-template-generator-app/static/js/main.04494311.js.map",
+    "main.12702c19.css.map": "/Email-template-generator-app/static/css/main.12702c19.css.map",
+    "main.f124d3a5.js.map": "/Email-template-generator-app/static/js/main.f124d3a5.js.map",
     "453.8ab44547.chunk.js.map": "/Email-template-generator-app/static/js/453.8ab44547.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.27da8561.css",
-    "static/js/main.04494311.js"
+    "static/css/main.12702c19.css",
+    "static/js/main.f124d3a5.js"
   ]
 }
