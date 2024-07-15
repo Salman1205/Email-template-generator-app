@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/Email-template-generator-app/static/css/main.12702c19.css",
-    "main.js": "/Email-template-generator-app/static/js/main.6637605d.js",
-    "static/js/453.8ab44547.chunk.js": "/Email-template-generator-app/static/js/453.8ab44547.chunk.js",
-    "static/media/sample.png": "/Email-template-generator-app/static/media/sample.1c72ff4485255ca09737.png",
-    "static/media/stayaLogo.jpeg": "/Email-template-generator-app/static/media/stayaLogo.fad85003d6cfcf6afd3a.jpeg",
-    "static/media/dummy.jfif": "/Email-template-generator-app/static/media/dummy.ad6b7be9b46bc55f0c13.jfif",
-    "index.html": "/Email-template-generator-app/index.html",
-    "main.12702c19.css.map": "/Email-template-generator-app/static/css/main.12702c19.css.map",
-    "main.6637605d.js.map": "/Email-template-generator-app/static/js/main.6637605d.js.map",
-    "453.8ab44547.chunk.js.map": "/Email-template-generator-app/static/js/453.8ab44547.chunk.js.map"
+    "main.css": "/Email-template-generator-app/login/static/css/main.5705a993.css",
+    "main.js": "/Email-template-generator-app/login/static/js/main.80130a68.js",
+    "static/js/453.8ab44547.chunk.js": "/Email-template-generator-app/login/static/js/453.8ab44547.chunk.js",
+    "static/media/sample.webp": "/Email-template-generator-app/login/static/media/sample.8dd1514f19874803cc7b.webp",
+    "static/media/stayaLogo.jpeg": "/Email-template-generator-app/login/static/media/stayaLogo.fad85003d6cfcf6afd3a.jpeg",
+    "static/media/dummy.jfif": "/Email-template-generator-app/login/static/media/dummy.ad6b7be9b46bc55f0c13.jfif",
+    "index.html": "/Email-template-generator-app/login/index.html",
+    "main.5705a993.css.map": "/Email-template-generator-app/login/static/css/main.5705a993.css.map",
+    "main.80130a68.js.map": "/Email-template-generator-app/login/static/js/main.80130a68.js.map",
+    "453.8ab44547.chunk.js.map": "/Email-template-generator-app/login/static/js/453.8ab44547.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.12702c19.css",
-    "static/js/main.6637605d.js"
+    "static/css/main.5705a993.css",
+    "static/js/main.80130a68.js"
   ]
 }
