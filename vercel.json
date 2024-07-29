@@ -7,6 +7,13 @@
         "config": {
           "outputDirectory": "frontend/out"
         }
+      },
+      {
+        "src": "backend/package.json",
+        "use": "@vercel/node",
+        "config": {
+          "outputDirectory": "backend/out"
+        }
       }
     ],
     "routes": [
@@ -17,8 +24,14 @@
       },
       {
         "src": "/api/(.*)",
-        "dest": "/backend/server.js",
+        "dest": "/backend/out/index.js",
         "methods": ["GET", "POST", "PUT", "DELETE"]
       }
-    ]
+    ],
+    "env": {
+    "DB_HOST": "emailtemplatebyateeb.mysql.database.azure.com", 
+    "DB_USER": "ateeb_admin",
+    "DB_PASSWORD": "ishaq321!",
+    "DB_NAME": "ateeb_db"
+    }
   }
