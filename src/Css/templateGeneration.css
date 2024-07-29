@@ -1,0 +1,163 @@
+* {
+    box-sizing: border-box; /* this includes border and margins to size */
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+.fullScreen {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.header {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    text-align: center; 
+    padding: 20px;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.header:hover {
+    background-color: #333;
+}
+
+.mainContainer {
+    display: flex;
+    height: 100%;
+    padding: 20px;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: clamp(300px, 40%, 450px);
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border-right: 2px solid #444;
+    transition: transform 0.3s ease;
+    height: 100vh;
+}
+
+.inputContainer:hover {
+    transform: scale(1.02);
+}
+
+.outputContainer {
+    display: flex;
+    height: fit-content;
+    /* flex-direction: column; */
+    gap: 1em;
+    width: 100%;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.outputContainer:hover {
+    transform: scale(1.02);
+}
+
+.promptTextArea {
+    width: 100%;
+    max-width: 400px;
+    height: 154px;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promptTextArea:focus {
+    border-color: #00acc1;
+    box-shadow: 0 0 5px rgba(0, 172, 193, 0.5);
+    outline: none;
+}
+
+.inputImage {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.inputImage:hover {
+    transform: scale(1.05);
+}
+
+.button {
+    background-color: #6c757d; /* Gray background */
+    color: white; /* White text */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+    background-color: #5a6268; /* Slightly darker gray on hover */
+    transform: translateY(-2px);
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus {
+    border-color: #00acc1;
+    box-shadow: 0 0 5px rgba(0, 172, 193, 0.5);
+    outline: none;
+}
+
+.remove-image-button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #ff6347;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+   
+  .remove-image-button:hover {
+    background-color: #e5533b;
+  }

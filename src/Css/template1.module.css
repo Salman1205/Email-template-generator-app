@@ -1,0 +1,73 @@
+* {
+    box-sizing: border-box; /* this includes border and margins to size */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:white;
+}
+.email-container {
+    height: fit-content;
+    width: 400px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+.banner_header {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+.banner_header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+.banner_main {
+    padding: 20px;
+}
+.banner_main img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+.banner_main h2 {
+    color: #333333;
+    font-size: 20px;
+}
+.banner_main p {
+    color: #666666;
+    font-size: 16px;
+}
+.button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #ff6347;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+.footer {
+    background-color: #333333;
+    color: hsl(0, 0%, 100%);
+    padding: 20px;
+    text-align: center;
+}
+.footer a {
+    color: #ff6347;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.banner1-hero-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
