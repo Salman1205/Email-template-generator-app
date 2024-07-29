@@ -1,34 +1,32 @@
-// backend/server.js 
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
+const port = 3000; // Set port to 3000
 
-// Use environment variables for database credentials
+app.use(bodyParser.json());
+// Allow requests from any origin for local development
+app.use(cors({ origin: '*' })); 
+
+// Configure database connection
 const dbConfig = {
-    host: process.env.DB_HOST, // e.g., 'emailtemplatebyateeb.mysql.database.azure.com'
-    user: process.env.DB_USER, // e.g., 'ateeb_admin'
-    password: process.env.DB_PASSWORD, // e.g., 'ishaq321!'
-    database: process.env.DB_NAME // e.g., 'ateeb_db'
+    host: 'emailtemplatebyateeb.mysql.database.azure.com',
+    user: 'ateeb_admin',
+    password: 'ishaq321!',
+    database: 'ateeb_db',
 };
 
-// Create a connection to the database
 const connection = mysql.createConnection(dbConfig);
 
 connection.connect(err => {
     if (err) {
         console.error('Database connection failed: ', err);
-        // You might want to return an error here for the serverless function 
     } else {
         console.log('Connected to the database.');
     }
 });
-
-// Middleware
-app.use(bodyParser.json());
-app.use(cors({ origin: '*' })); // Allow requests from any origin
 
 // Signup endpoint
 app.post('/signup', (req, res) => {
@@ -65,5 +63,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-// Export the app (required for serverless functions)
-module.exports = app; 
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});
