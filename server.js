@@ -1,21 +1,21 @@
-const express = require('express');
 const mysql = require('mysql2');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
 
+// Create an Express application
 const app = express();
-const port = 3000; // Set port to 3000
 
+// Middleware
 app.use(bodyParser.json());
-// Allow requests from any origin for local development
-app.use(cors({ origin: '*' })); 
+app.use(cors());
 
-// Configure database connection
+// Database configuration
 const dbConfig = {
-    host: 'emailtemplatebyateeb.mysql.database.azure.com',
-    user: 'ateeb_admin',
-    password: 'ishaq321!',
-    database: 'ateeb_db',
+    host: process.env.DB_HOST || 'emailtemplatebyateeb.mysql.database.azure.com',
+    user: process.env.DB_USER || 'ateeb_admin',
+    password: process.env.DB_PASSWORD || 'ishaq321!',
+    database: process.env.DB_NAME || 'ateeb_db',
 };
 
 const connection = mysql.createConnection(dbConfig);
@@ -29,7 +29,7 @@ connection.connect(err => {
 });
 
 // Signup endpoint
-app.post('/signup', (req, res) => {
+app.post('/api/signup', (req, res) => {
     const { username, email, password } = req.body;
     const query = 'INSERT INTO Users (username, email, password) VALUES (?, ?, ?)';
 
@@ -45,7 +45,7 @@ app.post('/signup', (req, res) => {
 });
 
 // Login endpoint
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     const query = 'SELECT * FROM Users WHERE email = ? AND password = ?';
 
@@ -63,6 +63,7 @@ app.post('/login', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
+// Export the Express app as a serverless function
+module.exports = (req, res) => {
+    app(req, res);
+};

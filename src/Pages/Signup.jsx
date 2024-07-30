@@ -27,7 +27,7 @@ const Signup = ({ loginCredentials, setLoginCredentials }) => {
         };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/signup`, {
+            const response = await fetch('https://email-template-generator-backend.vercel.app/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

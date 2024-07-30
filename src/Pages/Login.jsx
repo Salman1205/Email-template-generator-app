@@ -1,68 +1,56 @@
-import React from 'react';
-import "../Css/login.css";
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ loginCredentials, setLoginCredentials }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = {
-            email: formData.get('email'),
-            password: formData.get('password')
-        };
-    
+        const data = { email, password };
         try {
-            const response = await fetch('https://email-template-generator-backend.vercel.app/login', {
+            const response = await fetch('https://email-template-generator-backend.vercel.app/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
             });
-    
+
             if (response.ok) {
-                console.log('Login successful');
-                // Handle success
+                const result = await response.json();
+                console.log('Login success:', result);
+                navigate('/profile');
             } else {
                 const errorData = await response.json();
-                console.error('Error:', errorData);
+                console.error('Login error:', errorData);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Network error:', error);
         }
     };
-    
-    
 
     return (
         <div className="login-container">
-            <div className="login-form">
-                <h1>Login to Your Account</h1>
-                <form id="login-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" required />
-                    </div>
-                    <button type="submit" className="login-button">Login</button>
-                    <div id="form-feedback" className="hidden">Login successful!</div>
-                </form>
-                <p>Don't have an account? <span 
-                    onClick={() => navigate("/signup")}
-                    style={{
-                        cursor: "pointer",
-                        color: "blue",
-                    }}
-                >Sign up here</span></p>
-            </div>
+            <h1>Login</h1>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
+                <button type="submit">Log In</button>
+            </form>
         </div>
     );
-}
+};
 
 export default Login;
