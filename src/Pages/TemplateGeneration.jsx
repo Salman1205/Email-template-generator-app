@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import "../Css/templateGeneration.css";
@@ -38,7 +39,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       "query": prompt.current.value,
     };
     console.log(Obj);
-    fetch("https://ideal-wildly-cat.ngrok-free.app/query", {
+    fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
