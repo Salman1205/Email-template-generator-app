@@ -1,69 +1,40 @@
-const mysql = require('mysql2');
-const cors = require('cors');
-const express = require('express');
-const bodyParser = require('body-parser');
+import { NextResponse } from 'next/server';
+import mysql from 'mysql2';
 
-// Create an Express application
-const app = express();
-
-// Middleware
-app.use(bodyParser.json());
-app.use(cors());
-
-// Database configuration
 const dbConfig = {
-    host: process.env.DB_HOST || 'emailtemplatebyateeb.mysql.database.azure.com',
-    user: process.env.DB_USER || 'ateeb_admin',
-    password: process.env.DB_PASSWORD || 'ishaq321!',
-    database: process.env.DB_NAME || 'ateeb_db',
+  host: 'emailtemplatebyateeb.mysql.database.azure.com',
+  user: 'ateeb_admin',
+  password: 'ishaq321!',
+  database: 'ateeb_db',
 };
 
 const connection = mysql.createConnection(dbConfig);
 
 connection.connect(err => {
-    if (err) {
-        console.error('Database connection failed: ', err);
-    } else {
-        console.log('Connected to the database.');
-    }
+  if (err) {
+    console.error('Database connection failed: ', err);
+  } else {
+    console.log('Connected to the database.');
+  }
 });
 
-// Signup endpoint
-app.post('/api/signup', (req, res) => {
-    const { username, email, password } = req.body;
-    const query = 'INSERT INTO Users (username, email, password) VALUES (?, ?, ?)';
+export async function POST(req) {
+  const { email, password } = await req.json();
 
-    connection.query(query, [username, email, password], (err, results) => {
+  return new Promise((resolve, reject) => {
+    connection.query(
+      'SELECT * FROM Users WHERE email = ? AND password = ?',
+      [email, password],
+      (err, results) => {
         if (err) {
-            console.error('Error inserting data: ', err);
-            res.status(500).json({ error: 'Failed to register user' });
-        } else {
-            console.log('User registered successfully:', results);
-            res.status(200).json({ message: 'User registered successfully!' });
-        }
-    });
-});
-
-// Login endpoint
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-    const query = 'SELECT * FROM Users WHERE email = ? AND password = ?';
-
-    connection.query(query, [email, password], (err, results) => {
-        if (err) {
-            console.error('Error querying data: ', err);
-            res.status(500).json({ error: 'Failed to login' });
+          console.error('Error querying data: ', err);
+          reject(new NextResponse.json({ error: 'Failed to login' }, { status: 500 }));
         } else if (results.length > 0) {
-            console.log('Login successful:', results);
-            res.status(200).json({ message: 'Login successful!' });
+          resolve(new NextResponse.json({ message: 'Login successful!' }, { status: 200 }));
         } else {
-            console.log('Invalid credentials');
-            res.status(401).json({ error: 'Invalid credentials' });
+          resolve(new NextResponse.json({ error: 'Invalid credentials' }, { status: 401 }));
         }
-    });
-});
-
-// Export the Express app as a serverless function
-module.exports = (req, res) => {
-    app(req, res);
-};
+      }
+    );
+  });
+}

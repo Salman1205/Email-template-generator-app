@@ -21,33 +21,34 @@ const Signup = ({ loginCredentials, setLoginCredentials }) => {
         const form = event.target;
         const formData = new FormData(form);
         const data = {
-            username: formData.get('username'),
-            email: formData.get('email'),
-            password: formData.get('password')
+          username: formData.get('username'),
+          email: formData.get('email'),
+          password: formData.get('password')
         };
-
+      
         try {
-            const response = await fetch('https://email-template-generator-backend.vercel.app/api/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                document.getElementById('form-feedback').classList.remove('hidden');
-                form.reset();
-                // Redirect to login page after successful signup
-                navigate('/login');
-            } else {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-            }
+          const response = await fetch('/api/signup', { // Updated to Vercel serverless function
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+      
+          if (response.ok) {
+            document.getElementById('form-feedback').classList.remove('hidden');
+            form.reset();
+            // Redirect to login page after successful signup
+            navigate('/login');
+          } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+          }
         } catch (error) {
-            console.error('Error:', error);
+          console.error('Error:', error);
         }
-    };
+      };
+      
 
     return (
         <div className="signup-container">
