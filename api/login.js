@@ -25,18 +25,22 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
         const { email, password } = req.body;
 
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Missing email or password' });
+        }
+
         const query = 'SELECT * FROM Users WHERE email = ? AND password = ?';
         connection.query(query, [email, password], (err, results) => {
             if (err) {
                 console.error('Error querying data: ', err);
-                res.status(500).json({ error: 'Failed to login' });
+                return res.status(500).json({ error: 'Failed to login' });
             } else if (results.length > 0) {
-                res.status(200).json({ message: 'Login successful!' });
+                return res.status(200).json({ message: 'Login successful!' });
             } else {
-                res.status(401).json({ error: 'Invalid credentials' });
+                return res.status(401).json({ error: 'Invalid credentials' });
             }
         });
     } else {
-        res.status(405).json({ error: 'Method Not Allowed' });
+        return res.status(405).json({ error: 'Method Not Allowed' });
     }
 };
