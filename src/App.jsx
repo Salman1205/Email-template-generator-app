@@ -1,61 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import TemplateGeneration from './Pages/TemplateGeneration';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
 import ProfilePage from './Pages/ProfilePage';
 import Editor from './Components/Editor';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef } from 'react';
 
-const clientId = 'your-client-id';
+const clientId = '359450186285-snvq9iqkcmddvve4i8eb74qokpueud0o.apps.googleusercontent.com';
+
 
 function App() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate=useNavigate();
+
+  let location = useLocation();
 
   useEffect(() => {
-    if (location.pathname === '/') {
-      navigate('/signup');
+    if (location.pathname === "/") {
+      navigate("/signup");
     }
-  }, [location, navigate]);
+  });
 
   const [loginCredentials, setLoginCredentials] = useState({
     id: 0,
-    name: '',
-    email: '',
-    password: ''
+    name: "",
+    email: "",
+    password: ""
   });
 
-  const [templateForEditor, setTemplateForEditor] = useState({
-    body: {
-      rows: [
-        {
-          columns: [
-            {
-              contents: [
-                {
-                  type: 'text',
-                  values: { text: 'Hello, World!' }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  });
+  const [templateForEditor, setTemplateForEditor] = useState(null);
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <Router>
-        <Routes>
-          <Route path="/signup" element={<Signup loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials} />} />
-          <Route path="/login" element={<Login loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials} />} />
-          <Route path="/profile" element={<ProfilePage loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials} />} />
-          <Route path="/template-generation" element={<TemplateGeneration setTemplateForEditor={setTemplateForEditor} />} />
-          <Route path="/template-editor" element={<Editor templateForEditor={templateForEditor} setTemplateForEditor={setTemplateForEditor} />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/signup" element={<Signup loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials}/>} />
+        <Route path="/login" element={<Login loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials}/>} />
+        <Route path="/profile" element={<ProfilePage loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials}/>} />
+        <Route path="/template-generation" element={<TemplateGeneration loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials} setTemplateForEditor={setTemplateForEditor}/>} />
+        <Route path="/template-editor" element={<Editor loginCredentials={loginCredentials} setLoginCredentials={setLoginCredentials} templateForEditor={templateForEditor}/>} />
+      </Routes>
     </GoogleOAuthProvider>
   );
 }
