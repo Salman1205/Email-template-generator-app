@@ -5,35 +5,29 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = {
-            email: formData.get('email'),
-            password: formData.get('password')
-        };
-    
-        try {
-            const response = await fetch('/api/login', {  // Make sure this URL matches your deployed API
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-    
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log('Login successful:', responseData);
-                // Handle successful login
-            } else {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-      
+  // In Login.jsx
+const handleSubmit = async () => {
+    try {
+      const response = await fetch('https://email-template-generator-backend.vercel.app/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to login');
+      }
+  
+      const data = await response.json();
+      console.log('Login successful:', data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+
     
     
 
