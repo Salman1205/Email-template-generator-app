@@ -15,11 +15,10 @@ const Login = () => {
         };
     
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
+            const response = await fetch('https://email-template-generator-backend.vercel.app/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${yourToken}` // Add your token if needed
                 },
                 body: JSON.stringify(data)
             });
@@ -35,6 +34,7 @@ const Login = () => {
             console.error('Error:', error);
         }
     };
+    
     
 
     return (
