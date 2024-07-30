@@ -13,22 +13,20 @@ const Login = () => {
             email: formData.get('email'),
             password: formData.get('password')
         };
-
+    
         try {
-            // Using localhost:3000 for the backend
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/login`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${yourToken}` // Add your token if needed
                 },
                 body: JSON.stringify(data)
             });
-
+    
             if (response.ok) {
-                document.getElementById('form-feedback').classList.remove('hidden');
-                form.reset();
-                // Redirect to profile page after successful login
-                navigate('/profile');
+                console.log('Login successful');
+                // Handle success
             } else {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
@@ -37,6 +35,7 @@ const Login = () => {
             console.error('Error:', error);
         }
     };
+    
 
     return (
         <div className="login-container">
