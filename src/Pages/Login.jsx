@@ -10,32 +10,29 @@ const Login = () => {
         const form = event.target;
         const formData = new FormData(form);
         const data = {
-          email: formData.get('email'),
-          password: formData.get('password')
+            email: formData.get('email'),
+            password: formData.get('password')
         };
-      
+    
         try {
-          const response = await fetch('/api/login', { // Updated to Vercel serverless function
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          });
-      
-          if (response.ok) {
-            document.getElementById('form-feedback').classList.remove('hidden');
-            form.reset();
-            // Redirect to another page after successful login
-            navigate('/profile');
-          } else {
-            const errorData = await response.json();
-            console.error('Error:', errorData);
-          }
+            const response = await fetch('/api/login', {  // Make sure this URL matches your deployed API
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Login successful:', responseData);
+                // Handle successful login
+            } else {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+            }
         } catch (error) {
-          console.error('Error:', error);
+            console.error('Error:', error);
         }
-      };
+    };
       
     
     
