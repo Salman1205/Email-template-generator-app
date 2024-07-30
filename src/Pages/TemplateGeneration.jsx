@@ -300,4 +300,4 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   );
 };
 
-export default TemplateGeneration;
+export default TemplateGeneration
