@@ -11,7 +11,7 @@ const Login = () => {
         e.preventDefault(); // Prevent the form from submitting the default way
 
         try {
-            const response = await fetch('https://email-template-generator-backend.vercel.app/login', {
+            const response = await fetch('https://email-template-generator-app.vercel.app/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
