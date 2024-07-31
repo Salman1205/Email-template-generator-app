@@ -11,12 +11,16 @@ const Login = () => {
         e.preventDefault(); // Prevent the form from submitting the default way
 
         try {
+            const formData = new URLSearchParams();
+            formData.append('email', email);
+            formData.append('password', password);
+
             const response = await fetch('https://email-template-generator-backend.vercel.app/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({ email, password }),
+                body: formData,
             });
 
             if (!response.ok) {
@@ -26,11 +30,30 @@ const Login = () => {
             const data = await response.json();
             console.log('Login successful:', data);
             // Optionally navigate to a different page after login
-            // navigate('/profile');
+            navigate('/profile');
         } catch (error) {
             console.error('Error:', error);
         }
     };
+
+    // return (
+    //     <form onSubmit={handleSubmit}>
+    //         <input
+    //             type="email"
+    //             value={email}
+    //             onChange={(e) => setEmail(e.target.value)}
+    //             placeholder="Email"
+    //         />
+    //         <input
+    //             type="password"
+    //             value={password}
+    //             onChange={(e) => setPassword(e.target.value)}
+    //             placeholder="Password"
+    //         />
+    //         <button type="submit">Login</button>
+    //     </form>
+    // );
+
 
     return (
         <div className="login-container">
@@ -41,22 +64,18 @@ const Login = () => {
                         <label htmlFor="email">Email</label>
                         <input
                             type="email"
-                            id="email"
-                            name="email"
-                            required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Email"
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input
                             type="password"
-                            id="password"
-                            name="password"
-                            required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Password"
                         />
                     </div>
                     <button type="submit" className="login-button">Login</button>
