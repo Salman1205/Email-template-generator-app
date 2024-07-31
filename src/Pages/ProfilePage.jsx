@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import "../Css/profile.css";
 import stayaLogo from "../Media/stayaLogo.jpeg";
 import sample from "../Media/sample.png";
@@ -6,7 +7,7 @@ import dummy from "../Media/dummy.jfif";
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
-    const navigate = useNavigate(); // Corrected usage: useNavigate should be called as a function
+    const navigate = useNavigate();
     const [logoPreview, setLogoPreview] = useState(dummy);
     const [formFeedback, setFormFeedback] = useState(false);
 
@@ -35,15 +36,25 @@ const ProfilePage = () => {
 
     return (
         <div className="profile_page-container">
+            <Helmet>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+                    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+                    crossorigin="anonymous" referrerpolicy="no-referrer" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Abel&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+                    rel="stylesheet" />
+            </Helmet>
             <div className="profile_page-sidebar">
                 <div className="profile_page-logo">
                     <img src={stayaLogo} alt="Sendif Logo" />
                 </div>
-                <button className="profile_page-new-design" onClick={() => navigate("/template-generation")}>New Design</button>
+                <button className="profile_page-new-design" onClick={() => navigate("/template-generation")}><i class="fa-solid fa-pen-to-square"></i>New Design</button>
                 <ul className="profile_page-menu">
-                    <li><a href="#">My Designs</a></li>
-                    <li><a href="#">Templates</a></li>
-                    <li><a href="#">Brand Kit</a></li>
+                    <li><a href="#" className='design-btn' style={{ backgroundColor: "white", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)" }}><i class="fa-solid fa-folder"></i>My Designs</a></li>
+                    <li><a href="#"><i class="fa-solid fa-wand-magic-sparkles"></i>Templates</a></li>
+                    <li><a href="#"><i class="fa-brands fa-slack"></i>Brand Kit</a></li>
                 </ul>
             </div>
             <div className="profile_page-main-content">
