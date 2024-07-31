@@ -41,13 +41,21 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       },
       body: JSON.stringify(Obj),
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log('Received data:', data);
-        setResult(data);
-      });
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log('Received data:', data);
+      setResult(data);
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
   };
-
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
