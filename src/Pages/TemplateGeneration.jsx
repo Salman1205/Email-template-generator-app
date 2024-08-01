@@ -6,13 +6,17 @@ import Template2 from '../Components/Template2.jsx';
 import InputSection from '../Components/InputSection.jsx';
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import juice from 'juice';
 
 const TemplateGeneration = ({ setTemplateForEditor }) => {
-  const navigate = useNavigate();
+
+  const navigate=useNavigate();
+
   const prompt = useRef(null);
   const [urlForShop, setUrlFromShop] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
+
   const [result, setResult] = useState({
     description: "the description",
     promo: "PROMOOOO",
@@ -30,32 +34,23 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const handleSendPrompt = () => {
-    const data = { query: prompt.current.value };
-  
-    console.log('Sending prompt:', data.query);
-  
-    fetch('https://email-template-generator-backend.vercel.app/query', {
+    const Obj = {
+      "query": prompt.current.value,
+    };
+    console.log(Obj);
+    fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(Obj),
     })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-      console.log('Received data:', data);
+      console.log(data);
       setResult(data);
-    })
-    .catch(error => {
-      console.error('Fetch error:', error);
-    });    
+    });
   };
-  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -76,17 +71,13 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
 
   const handleCopyToClipboard = (templateId) => {
     const templateElement = document.getElementById(templateId);
-    if (templateElement) {
-      const range = document.createRange();
-      range.selectNode(templateElement);
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(range);
-      document.execCommand("copy");
-      window.getSelection().removeAllRanges();
-      alert("Template copied to clipboard!");
-    } else {
-      console.error(`Element with ID ${templateId} not found.`);
-    }
+    const range = document.createRange();
+    range.selectNode(templateElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    alert("Template copied to clipboard!");
   };
 
   const extractHtml = (templateId) => {
@@ -98,145 +89,144 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       console.error(`Element with ID ${templateId} not found.`);
       return null;
     }
-  };
+  }
 
   const sendToEditor = (templateId) => {
+
     const extractedHtml = extractHtml(templateId);
-    if (extractedHtml) {
-      console.log('Extracted HTML:', extractedHtml);
-      const design = convertHtmlToUnlayerDesign(extractedHtml);
-      setTemplateForEditor(design);
-      navigate("/template-editor");
-    } else {
-      console.error(`Extracted HTML is null for ID ${templateId}`);
-    }
+    console.log(extractedHtml);
+
+    const design = convertHtmlToUnlayerDesign(extractedHtml);
+
+    setTemplateForEditor(design);
+    navigate("/template-editor");
   };
 
   const convertHtmlToUnlayerDesign = (html) => {
     return {
       "counters": {
-        "u_column": 1,
-        "u_row": 1
+          "u_column": 1,
+          "u_row": 1
       },
       "body": {
-        "id": "NfIZ1jM7Ot",
-        "rows": [
-          {
-            "id": "BeViTx_Z5m",
-            "cells": [
-              1
-            ],
-            "columns": [
+          "id": "NfIZ1jM7Ot",
+          "rows": [
               {
-                "id": "ObTG2DpJDl",
-                "contents": [
-                  {
-                    "id": "text_block_1",
-                    "type": "html",
-                    "values": {
-                      "html": html
-                    }
+                  "id": "BeViTx_Z5m",
+                  "cells": [
+                      1
+                  ],
+                  "columns": [
+                      {
+                          "id": "ObTG2DpJDl",
+                          "contents": [
+                              {
+                                  "id": "text_block_1",
+                                  "type": "html",
+                                  "values": {
+                                      "html": html
+                                  }
+                              }
+                          ],
+                          "values": {
+                              "backgroundColor": "",
+                              "padding": "0px",
+                              "border": {},
+                              "borderRadius": "0px",
+                              "_meta": {
+                                  "htmlID": "u_column_1",
+                                  "htmlClassNames": "u_column"
+                              }
+                          }
+                      }
+                  ],
+                  "values": {
+                      "displayCondition": null,
+                      "columns": false,
+                      "backgroundColor": "",
+                      "columnsBackgroundColor": "",
+                      "backgroundImage": {
+                          "url": "",
+                          "fullWidth": true,
+                          "repeat": "no-repeat",
+                          "size": "custom",
+                          "position": "center",
+                          "customPosition": [
+                              "50%",
+                              "50%"
+                          ]
+                      },
+                      "padding": "0px",
+                      "anchor": "",
+                      "hideDesktop": false,
+                      "_meta": {
+                          "htmlID": "u_row_1",
+                          "htmlClassNames": "u_row"
+                      },
+                      "selectable": true,
+                      "draggable": true,
+                      "duplicatable": true,
+                      "deletable": true,
+                      "hideable": true
                   }
-                ],
-                "values": {
-                  "backgroundColor": "",
-                  "padding": "0px",
-                  "border": {},
-                  "borderRadius": "0px",
-                  "_meta": {
-                    "htmlID": "u_column_1",
-                    "htmlClassNames": "u_column"
-                  }
-                }
               }
-            ],
-            "values": {
-              "displayCondition": null,
-              "columns": false,
-              "backgroundColor": "",
-              "columnsBackgroundColor": "",
+          ],
+          "headers": [],
+          "footers": [],
+          "values": {
+              "popupPosition": "center",
+              "popupWidth": "600px",
+              "popupHeight": "auto",
+              "borderRadius": "10px",
+              "contentAlign": "center",
+              "contentVerticalAlign": "center",
+              "contentWidth": "500px",
+              "fontFamily": {
+                  "label": "Arial",
+                  "value": "arial,helvetica,sans-serif"
+              },
+              "textColor": "#000000",
+              "popupBackgroundColor": "#FFFFFF",
+              "popupBackgroundImage": {
+                  "url": "",
+                  "fullWidth": true,
+                  "repeat": "no-repeat",
+                  "size": "cover",
+                  "position": "center"
+              },
+              "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+              "popupCloseButton_position": "top-right",
+              "popupCloseButton_backgroundColor": "#DDDDDD",
+              "popupCloseButton_iconColor": "#000000",
+              "popupCloseButton_borderRadius": "0px",
+              "popupCloseButton_margin": "0px",
+              "popupCloseButton_action": {
+                  "name": "close_popup",
+                  "attrs": {
+                      "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+                  }
+              },
+              "backgroundColor": "#F7F8F9",
+              "preheaderText": "",
+              "linkStyle": {
+                  "body": true,
+                  "linkColor": "#0000ee",
+                  "linkHoverColor": "#0000ee",
+                  "linkUnderline": true,
+                  "linkHoverUnderline": true
+              },
               "backgroundImage": {
-                "url": "",
-                "fullWidth": true,
-                "repeat": "no-repeat",
-                "size": "custom",
-                "position": "center",
-                "customPosition": [
-                  "50%",
-                  "50%"
-                ]
+                  "url": "",
+                  "fullWidth": true,
+                  "repeat": "no-repeat",
+                  "size": "custom",
+                  "position": "center"
               },
-              "padding": "0px",
-              "anchor": "",
-              "hideDesktop": false,
               "_meta": {
-                "htmlID": "u_row_1",
-                "htmlClassNames": "u_row"
-              },
-              "selectable": true,
-              "draggable": true,
-              "duplicatable": true,
-              "deletable": true,
-              "hideable": true
-            }
+                  "htmlID": "u_body",
+                  "htmlClassNames": "u_body"
+              }
           }
-        ],
-        "headers": [],
-        "footers": [],
-        "values": {
-          "popupPosition": "center",
-          "popupWidth": "600px",
-          "popupHeight": "auto",
-          "borderRadius": "10px",
-          "contentAlign": "center",
-          "contentVerticalAlign": "center",
-          "contentWidth": "500px",
-          "fontFamily": {
-            "label": "Arial",
-            "value": "arial,helvetica,sans-serif"
-          },
-          "textColor": "#000000",
-          "popupBackgroundColor": "#FFFFFF",
-          "popupBackgroundImage": {
-            "url": "",
-            "fullWidth": true,
-            "repeat": "no-repeat",
-            "size": "cover",
-            "position": "center"
-          },
-          "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
-          "popupCloseButton_position": "top-right",
-          "popupCloseButton_backgroundColor": "#DDDDDD",
-          "popupCloseButton_iconColor": "#000000",
-          "popupCloseButton_borderRadius": "0px",
-          "popupCloseButton_margin": "0px",
-          "popupCloseButton_action": {
-            "name": "close_popup",
-            "attrs": {
-              "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
-            }
-          },
-          "backgroundColor": "#F7F8F9",
-          "preheaderText": "",
-          "linkStyle": {
-            "body": true,
-            "linkColor": "#0000ee",
-            "linkHoverColor": "#0000ee",
-            "linkUnderline": true,
-            "linkHoverUnderline": true
-          },
-          "backgroundImage": {
-            "url": "",
-            "fullWidth": true,
-            "repeat": "no-repeat",
-            "size": "custom",
-            "position": "center"
-          },
-          "_meta": {
-            "htmlID": "u_body",
-            "htmlClassNames": "u_body"
-          }
-        }
       },
       "schemaVersion": 16
     };
@@ -246,6 +236,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     <div className="fullScreen">
       <header className='header'>Template Generation</header>
       <div className="mainContainer">
+
         {/* user input */}
         <InputSection 
           setUrlFromShop={setUrlFromShop} 
@@ -305,6 +296,6 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       </div>
     </div>
   );
-};
+}
 
 export default TemplateGeneration;
