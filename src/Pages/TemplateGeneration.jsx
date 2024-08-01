@@ -30,32 +30,32 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const handleSendPrompt = () => {
-    const Obj = {
-      "query": prompt.current.value,
-    };
-    console.log('Sending prompt:', Obj);
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/query`, {
+    const data = { query: prompt.current.value };
+  
+    console.log('Sending prompt:', data.query);
+  
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/query`, {  // Corrected this line
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(Obj),
+      body: JSON.stringify(data)
     })
     .then(res => {
       if (!res.ok) {
-          throw new Error('Network response was not ok');
+        throw new Error('Network response was not ok');
       }
       return res.json();
-  })
-  .then(data => {
+    })
+    .then(data => {
       console.log('Received data:', data);
       setResult(data);
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error('Fetch error:', error);
-      // Additional error handling can go here
-  });  
+    });
   };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
