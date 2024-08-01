@@ -53,7 +53,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     })
     .catch(error => {
       console.error('Fetch error:', error);
-    });
+    });    
   };
   
 
