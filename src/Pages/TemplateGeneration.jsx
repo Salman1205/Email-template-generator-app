@@ -34,7 +34,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       "query": prompt.current.value,
     };
     console.log('Sending prompt:', Obj);
-    fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/query`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
