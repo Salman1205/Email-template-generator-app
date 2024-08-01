@@ -37,7 +37,8 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     const Obj = {
       "query": prompt.current.value,
     };
-    console.log(Obj);
+    console.log('Sending prompt to URL:', process.env.REACT_APP_FLASK_URL);
+  
     fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
       method: 'POST',
       headers: {
@@ -45,12 +46,22 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       },
       body: JSON.stringify(Obj),
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
     .then(data => {
-      console.log(data);
+      console.log('Received data:', data);
       setResult(data);
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
     });
   };
+  
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
