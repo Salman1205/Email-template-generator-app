@@ -43,7 +43,9 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     })
     .then(res => {
       if (!res.ok) {
-        throw new Error('Network response was not ok');
+        return res.json().then(errData => {
+          throw new Error(`Error: ${errData.error || 'Unknown error occurred'}`);
+        });
       }
       return res.json();
     })
@@ -52,10 +54,10 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       setResult(data);
     })
     .catch(error => {
-      console.error('Fetch error:', error);
+      console.error('Fetch error:', error.message);
     });
   };
-  
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -74,7 +76,6 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const handleCopyToClipboard = (templateId) => {
-    console.log('Copy to Clipboard called with:', templateId); // Debug log
     const templateElement = document.getElementById(templateId);
     if (templateElement) {
       const range = document.createRange();
@@ -101,7 +102,6 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const sendToEditor = (templateId) => {
-    console.log('Send to Editor called with:', templateId); // Debug log
     const extractedHtml = extractHtml(templateId);
     if (extractedHtml) {
       console.log('Extracted HTML:', extractedHtml);
@@ -308,4 +308,4 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   );
 };
 
-export default TemplateGeneration
+export default TemplateGeneration;
