@@ -34,7 +34,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   
     console.log('Sending prompt:', data.query);
   
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/query`, {  // Corrected this line
+    fetch('https://email-template-generator-backend.vercel.app/query', {  // Corrected this line
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
