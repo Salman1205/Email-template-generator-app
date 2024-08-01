@@ -38,7 +38,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       "query": prompt.current.value,
     };
     console.log(Obj);
-    fetch('https://ideal-wildly-cat.ngrok-free.app/query', {
+    fetch('https://ai-email-template-backend.vercel.app/query', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
