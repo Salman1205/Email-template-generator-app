@@ -31,10 +31,10 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
 
   const handleSendPrompt = () => {
     const data = { query: prompt.current.value };
-
+  
     console.log('Sending prompt:', data.query);
-
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/query`, {  // Use environment variable for URL
+  
+    fetch('https://email-template-generator-backend.vercel.app/query', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -53,8 +53,9 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     })
     .catch(error => {
       console.error('Fetch error:', error);
-    });
+    });    
   };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -112,50 +113,195 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const convertHtmlToUnlayerDesign = (html) => {
-    // Assuming you have a function that converts HTML to Unlayer design
-    // Implement this function according to your needs
-    return { html };  // Placeholder implementation
+    return {
+      "counters": {
+        "u_column": 1,
+        "u_row": 1
+      },
+      "body": {
+        "id": "NfIZ1jM7Ot",
+        "rows": [
+          {
+            "id": "BeViTx_Z5m",
+            "cells": [
+              1
+            ],
+            "columns": [
+              {
+                "id": "ObTG2DpJDl",
+                "contents": [
+                  {
+                    "id": "text_block_1",
+                    "type": "html",
+                    "values": {
+                      "html": html
+                    }
+                  }
+                ],
+                "values": {
+                  "backgroundColor": "",
+                  "padding": "0px",
+                  "border": {},
+                  "borderRadius": "0px",
+                  "_meta": {
+                    "htmlID": "u_column_1",
+                    "htmlClassNames": "u_column"
+                  }
+                }
+              }
+            ],
+            "values": {
+              "displayCondition": null,
+              "columns": false,
+              "backgroundColor": "",
+              "columnsBackgroundColor": "",
+              "backgroundImage": {
+                "url": "",
+                "fullWidth": true,
+                "repeat": "no-repeat",
+                "size": "custom",
+                "position": "center",
+                "customPosition": [
+                  "50%",
+                  "50%"
+                ]
+              },
+              "padding": "0px",
+              "anchor": "",
+              "hideDesktop": false,
+              "_meta": {
+                "htmlID": "u_row_1",
+                "htmlClassNames": "u_row"
+              },
+              "selectable": true,
+              "draggable": true,
+              "duplicatable": true,
+              "deletable": true,
+              "hideable": true
+            }
+          }
+        ],
+        "headers": [],
+        "footers": [],
+        "values": {
+          "popupPosition": "center",
+          "popupWidth": "600px",
+          "popupHeight": "auto",
+          "borderRadius": "10px",
+          "contentAlign": "center",
+          "contentVerticalAlign": "center",
+          "contentWidth": "500px",
+          "fontFamily": {
+            "label": "Arial",
+            "value": "arial,helvetica,sans-serif"
+          },
+          "textColor": "#000000",
+          "popupBackgroundColor": "#FFFFFF",
+          "popupBackgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "cover",
+            "position": "center"
+          },
+          "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
+          "popupCloseButton_position": "top-right",
+          "popupCloseButton_backgroundColor": "#DDDDDD",
+          "popupCloseButton_iconColor": "#000000",
+          "popupCloseButton_borderRadius": "0px",
+          "popupCloseButton_margin": "0px",
+          "popupCloseButton_action": {
+            "name": "close_popup",
+            "attrs": {
+              "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
+            }
+          },
+          "backgroundColor": "#F7F8F9",
+          "preheaderText": "",
+          "linkStyle": {
+            "body": true,
+            "linkColor": "#0000ee",
+            "linkHoverColor": "#0000ee",
+            "linkUnderline": true,
+            "linkHoverUnderline": true
+          },
+          "backgroundImage": {
+            "url": "",
+            "fullWidth": true,
+            "repeat": "no-repeat",
+            "size": "custom",
+            "position": "center"
+          },
+          "_meta": {
+            "htmlID": "u_body",
+            "htmlClassNames": "u_body"
+          }
+        }
+      },
+      "schemaVersion": 16
+    };
   };
 
   return (
-    <div className="container mt-5">
-      <div className="input-section">
-        <textarea ref={prompt} placeholder="Enter your prompt here..." className="form-control" rows="4"></textarea>
-        <button onClick={handleSendPrompt} className="btn btn-primary mt-3">Generate</button>
-      </div>
-      {result.subject && (
-        <div className="result-section mt-4">
-          <h2>{result.subject}</h2>
-          <h3>{result.promo}</h3>
-          <p>{result.description}</p>
-          {result.image_url && <img src={result.image_url} alt="Generated" />}
+    <div className="fullScreen">
+      <header className='header'>Template Generation</header>
+      <div className="mainContainer">
+        {/* user input */}
+        <InputSection 
+          setUrlFromShop={setUrlFromShop} 
+          urlForShop={urlForShop} 
+          setResultToDefault={setResultToDefault}
+          handleSendPrompt={handleSendPrompt}
+          prompt={prompt}
+          handleFileChange={handleFileChange}
+          handleRemoveImage={handleRemoveImage}
+        />
+
+        {/* output */}
+        <div className="outputContainer">
+          {
+            (result.image_url || uploadedImage) && (
+            <>
+              <div className="template-container">
+                <Dropdown className="template-options">
+                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                    •••
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => handleCopyToClipboard('template1')}>
+                      Copy to Gmail
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => sendToEditor("template1")}>
+                      Send to Editor
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <div id="template1">
+                  <Template1 result={{ ...result, image_url: uploadedImage || result.image_url }} />
+                </div>
+              </div>
+              <div className="template-container">
+                <Dropdown className="template-options">
+                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                    •••
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => handleCopyToClipboard('template2')}>
+                      Copy to Gmail
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => sendToEditor("template2")}>
+                      Send to Editor
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <div id="template2">
+                  <Template2 result={{ ...result, image_url: uploadedImage || result.image_url }} />
+                </div>
+              </div>
+            </>
+            )
+          }
         </div>
-      )}
-      <div className="image-upload mt-4">
-        <input type="file" onChange={handleFileChange} />
-        {uploadedImage && (
-          <div>
-            <img src={uploadedImage} alt="Uploaded Preview" style={{ maxWidth: '200px', marginTop: '10px' }} />
-            <button onClick={handleRemoveImage} className="btn btn-danger mt-2">Remove Image</button>
-          </div>
-        )}
-      </div>
-      <div className="templates mt-4">
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Select Template
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => sendToEditor('template1')}>Template 1</Dropdown.Item>
-            <Dropdown.Item onClick={() => sendToEditor('template2')}>Template 2</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-      <div id="template1">
-        <Template1 />
-      </div>
-      <div id="template2">
-        <Template2 />
       </div>
     </div>
   );
