@@ -30,14 +30,16 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   };
 
   const handleSendPrompt = () => {
-    const formData = new FormData();
-    formData.append('query', prompt.current.value);
-  
-    console.log('Sending prompt:', formData.get('query'));
-  
+    const Obj = {
+      "query": prompt.current.value,
+    };
+    console.log('Sending prompt:', Obj);
     fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Obj),
     })
     .then(res => {
       if (!res.ok) {
@@ -53,7 +55,6 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       console.error('Fetch error:', error);
     });
   };
-  
   
   const handleFileChange = (event) => {
     const file = event.target.files[0];
