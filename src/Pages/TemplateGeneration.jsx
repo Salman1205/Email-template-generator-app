@@ -7,7 +7,38 @@ import InputSection from '../Components/InputSection.jsx';
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import juice from 'juice';
+const jsonGenerators = {
+  // Arrow function to get button JSON with text and URL
+  getButton: (text, url) => ({
+      "id": null,
+      "type": "button",
+      "values": {
+          "text": text || "Click Me",
+          "href": url || "",
+      }
+  }),
+
+  // Arrow function to get text JSON with text
+  getText: (text) => ({
+      "id": null,
+      "type": "text",
+      "values": {
+          "text": text || "This is a default text block.",
+      }
+  }),
+
+  // Arrow function to get image JSON with URL
+  getImage: (url) => ({
+      "id": null,
+      "type": "image",
+      "values": {
+          "src": {
+              "url": url || ""
+          },
+          "altText": "Default Image",
+      }
+  })
+};
 
 const TemplateGeneration = ({ setTemplateForEditor }) => {
 
@@ -38,7 +69,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       "query": prompt.current.value,
     };
     console.log(Obj);
-    fetch('https://ai-email-template-backend.vercel.app/query', {
+    fetch(`${process.env.REACT_APP_QUERY_URL}/query`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +114,8 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
   const extractHtml = (templateId) => {
     const element = document.getElementById(templateId);
     if (element) {
-      const htmlWithInlineStyles = juice(element.outerHTML);
+      const htmlWithInlineStyles = element.innerHTML;
+      console.log(htmlWithInlineStyles);
       return htmlWithInlineStyles;
     } else {
       console.error(`Element with ID ${templateId} not found.`);
@@ -96,144 +128,72 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
     const extractedHtml = extractHtml(templateId);
     console.log(extractedHtml);
 
-    const design = convertHtmlToUnlayerDesign(extractedHtml);
+    setTemplateForEditor(prev => {
+      let current = prev;
+      current.body.rows[0].columns[0].contents[0].values.text = extractedHtml;
+      return prev;
+    });
 
-    setTemplateForEditor(design);
     navigate("/template-editor");
   };
 
-  const convertHtmlToUnlayerDesign = (html) => {
-    return {
-      "counters": {
-          "u_column": 1,
-          "u_row": 1
-      },
-      "body": {
-          "id": "NfIZ1jM7Ot",
-          "rows": [
-              {
-                  "id": "BeViTx_Z5m",
-                  "cells": [
-                      1
-                  ],
-                  "columns": [
-                      {
-                          "id": "ObTG2DpJDl",
-                          "contents": [
-                              {
-                                  "id": "text_block_1",
-                                  "type": "html",
-                                  "values": {
-                                      "html": html
-                                  }
-                              }
-                          ],
-                          "values": {
-                              "backgroundColor": "",
-                              "padding": "0px",
-                              "border": {},
-                              "borderRadius": "0px",
-                              "_meta": {
-                                  "htmlID": "u_column_1",
-                                  "htmlClassNames": "u_column"
-                              }
-                          }
-                      }
-                  ],
-                  "values": {
-                      "displayCondition": null,
-                      "columns": false,
-                      "backgroundColor": "",
-                      "columnsBackgroundColor": "",
-                      "backgroundImage": {
-                          "url": "",
-                          "fullWidth": true,
-                          "repeat": "no-repeat",
-                          "size": "custom",
-                          "position": "center",
-                          "customPosition": [
-                              "50%",
-                              "50%"
-                          ]
-                      },
-                      "padding": "0px",
-                      "anchor": "",
-                      "hideDesktop": false,
-                      "_meta": {
-                          "htmlID": "u_row_1",
-                          "htmlClassNames": "u_row"
-                      },
-                      "selectable": true,
-                      "draggable": true,
-                      "duplicatable": true,
-                      "deletable": true,
-                      "hideable": true
-                  }
-              }
-          ],
-          "headers": [],
-          "footers": [],
-          "values": {
-              "popupPosition": "center",
-              "popupWidth": "600px",
-              "popupHeight": "auto",
-              "borderRadius": "10px",
-              "contentAlign": "center",
-              "contentVerticalAlign": "center",
-              "contentWidth": "500px",
-              "fontFamily": {
-                  "label": "Arial",
-                  "value": "arial,helvetica,sans-serif"
-              },
-              "textColor": "#000000",
-              "popupBackgroundColor": "#FFFFFF",
-              "popupBackgroundImage": {
-                  "url": "",
-                  "fullWidth": true,
-                  "repeat": "no-repeat",
-                  "size": "cover",
-                  "position": "center"
-              },
-              "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
-              "popupCloseButton_position": "top-right",
-              "popupCloseButton_backgroundColor": "#DDDDDD",
-              "popupCloseButton_iconColor": "#000000",
-              "popupCloseButton_borderRadius": "0px",
-              "popupCloseButton_margin": "0px",
-              "popupCloseButton_action": {
-                  "name": "close_popup",
-                  "attrs": {
-                      "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
-                  }
-              },
-              "backgroundColor": "#F7F8F9",
-              "preheaderText": "",
-              "linkStyle": {
-                  "body": true,
-                  "linkColor": "#0000ee",
-                  "linkHoverColor": "#0000ee",
-                  "linkUnderline": true,
-                  "linkHoverUnderline": true
-              },
-              "backgroundImage": {
-                  "url": "",
-                  "fullWidth": true,
-                  "repeat": "no-repeat",
-                  "size": "custom",
-                  "position": "center"
-              },
-              "_meta": {
-                  "htmlID": "u_body",
-                  "htmlClassNames": "u_body"
-              }
-          }
-      },
-      "schemaVersion": 16
-    };
-  };
+  //working on this
+  const seperateOuterDivToEachChild = (html) => {
+    // Original container
+    const original = document.createElement("div");
+    original.innerHTML = html;
+
+    console.log(original.firstElementChild);
+
+    // Select all child nodes of the container
+    const children = Array.from(original.childNodes);
+    console.log("children: ", children);
+    // Create an array to hold the wrapped divs
+    const wrappedDivs = [];
+
+    // Iterate through each child node and wrap it in a <div>
+    children.forEach(child => {
+        const wrapperDiv = document.createElement('div');
+        wrapperDiv.appendChild(child);
+        wrappedDivs.push(wrapperDiv.outerHTML);
+    });
+    // console.log("Original: ", html);
+    // console.log("Seperated: ", wrappedDivs);
+
+    return wrappedDivs;
+  }
+
+// Example usage
+const originalHtml = `
+    <div style="padding: 20px;">
+        <img 
+            src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixid=M3w2MzA3MDB8MHwxfHNlYXJjaHw4fHxkb2d8ZW58MHx8fHwxNzIyMzI3MzcwfDA&amp;ixlib=rb-4.0.3" 
+            alt="Generated" 
+            style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px 8px 0px 0px;"
+        >
+        <h2>"Spoil your furry friend with the best!"</h2>
+        <p>"Our premium dog food provides complete nutrition for a healthy and vibrant life. Formulated with high-quality ingredients, it supports optimal growth, energy levels, and a shiny coat. Give your dog the gift of delicious, nutritious meals!"</p>
+        <a 
+            href="#" 
+            style="display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: rgb(255, 99, 71); color: rgb(255, 255, 255); text-align: center; text-decoration: none; border-radius: 5px; font-size: 18px;"
+        >
+            Shop Now
+        </a>
+    </div>
+`;
+
+  const SeperateChildren = (html) => {
+    const children = Array.from(html.childNodes);
+
+    children.forEach((child) => {
+      const seperateGrandChildren = seperateOuterDivToEachChild(child);
+      return seperateGrandChildren;
+    })
+  }
 
   return (
-    <div className="fullScreen">
+    <div className='fullScreen'>
+      {/* <button onClick={() => seperateOuterDivToEachChild(originalHtml)}>asdf</button> */}
       <header className='header'>Template Generation</header>
       <div className="mainContainer">
 

@@ -40,7 +40,13 @@ const Editor = ({ templateForEditor }) => {
     };
 
     return (
-        <div>
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100vw",
+            height: "100vh"
+            /* border: 2px solid red; */
+        }}>
             <div>
                 <button onClick={exportHtml}>Export HTML</button>
                 <button onClick={exportJson}>Export Json</button>
