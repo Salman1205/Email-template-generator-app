@@ -38,7 +38,7 @@ const TemplateGeneration = ({ setTemplateForEditor }) => {
       "query": prompt.current.value,
     };
     console.log(Obj);
-    fetch(`${process.env.REACT_APP_FLASK_URL}/query`, {
+    fetch('https://email-template-generator-backend.vercel.app/query', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
