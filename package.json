@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://email-template-generator-backend.vercel.app",
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
     "@tanstack/react-query": "^5.50.1",
