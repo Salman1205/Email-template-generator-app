@@ -232,7 +232,7 @@ h1 {
     cursor: pointer;
     margin-top: 10px;
     transition: transform 0.3s ease-in-out;
-    margin-left: 5.2rem;
+    /* margin-left: 5.2rem; */
     opacity: 0.9;
 }
 

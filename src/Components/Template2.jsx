@@ -10,7 +10,8 @@ const styles = {
   },
   logo: {
     width: '80px',
-    position: 'absolute',
+    position: 'fixed',
+    marginLeft: "0px",
     zIndex: 10,
   },
   banner2EmailContainer: {

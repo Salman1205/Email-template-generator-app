@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dummy from "../Media/dummy.png";
 import Template1 from '../Components/Template1.jsx';
 import Template2 from '../Components/Template2.jsx';
@@ -21,10 +21,13 @@ const TemplateGeneration = ({
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [isTemplate1, setIsTemplate1] = useState(true);
-    const [selectedLogo, setSelectedLogo] = useState(dummy);
+    const [selectedLogo, setSelectedLogo] = useState({
+        fileType: "",
+        base64String: "",
+    });
 
+    
     const promptRef = useRef(null);
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -33,18 +36,39 @@ const TemplateGeneration = ({
             setFormFeedback(false);
         }, 3000);
     };
-
+    
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);
     };
+    
+    // useEffect(() => handleLogoChange(null));
 
-    const handleLogoChange = (event) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setLogoPreview(e.target.result);
-            setSelectedLogo(e.target.result);
+    const createFileFromURL = async (url) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            // Create a File object with the Blob
+            return new File([blob], "default.png", { type: blob.type });
+        } catch (error) {
+            console.error('Error creating file from URL:', error);
+            return null;
+        }
+    };
+
+    const handleLogoChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1]; 
+                setLogoPreview(reader.result); 
+                setSelectedLogo({
+                    fileType: file.type,
+                    base64String: base64String
+                });
         };
-        reader.readAsDataURL(event.target.files[0]);
+        reader.readAsDataURL(file);
+    }
     };
 
     const handleCopyToClipboard = (id) => {
@@ -126,7 +150,8 @@ const TemplateGeneration = ({
     
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
+            console.log(errorText);
+            throw new Error(`Error: ${errorText}`);
         }
     
         const data = await response.json();
@@ -194,30 +219,39 @@ const TemplateGeneration = ({
                         </div>
                     ) : result ? (
                         <div className="template-container">
-                            <button className="copy-button" onClick={() => handleCopyToClipboard('template1')}>
-                                <i className="fa-solid fa-clipboard"></i>
-                            </button>
-                            <button className="edit-button" onClick={() => sendToEditor("template1")}>
-                                <i className="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <i
-                                className={`fa-solid fa-arrow-right toggle-template ${isTemplate1 ? 'rotate-right' : 'rotate-left'}`}
-                                onClick={toggleTemplate}
-                                aria-label="Toggle Template"
-                            ></i>
-                            <div id="template1">
-                                {isTemplate1 ? 
-                                (
-                                    <div id="template1">
-                                        <Template1 result={result} logo={selectedLogo} />
-                                    </div>
-                                ) : (
-                                    <div id="template2">
-                                        <Template2 result={result} logo={selectedLogo} />
-                                    </div>
-                                )}
+                            <div style={{
+                                display: "flex",
+                                gap: "5em",
+                                justifyContent: "center"
+                            }}>
+                                <button className="copy-button" onClick={() => saveToDatabase(isTemplate1 ? "template1" : "template2")}>
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </button>
+                                <button className="copy-button" onClick={() => handleCopyToClipboard(isTemplate1 ? "template1" : "template2")}>
+                                    <i className="fa-solid fa-clipboard"></i>
+                                </button>
+                                <button className="edit-button" onClick={() => sendToEditor(isTemplate1 ? "template1" : "template2")}>
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button className="edit-button" >
+                                    <i
+                                        className={`fa-solid fa-arrow-right toggle-template ${isTemplate1 ? 'rotate-right' : 'rotate-left'}`}
+                                        onClick={toggleTemplate}
+                                        aria-label="Toggle Template"
+                                    ></i>
+                                </button>
                             </div>
-                        </div>
+                            {isTemplate1 ? 
+                            (
+                                <div id="template1">
+                                    <Template1 result={result} logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} />
+                                </div>
+                            ) : (
+                                <div id="template2">
+                                    <Template2 result={result} logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} />
+                                </div>
+                            )}
+                    </div>
                     ) : (
                         <p>No result to display</p>
                     )}
