@@ -1,8 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import "../Css/profile.css";
 
 
-const SavedTemplates = ({loginCredentials, setLoginCredentials, menuVisible, setMenuVisible}) => {
+const SavedTemplates = ({
+    loginCredentials, 
+    setLoginCredentials, 
+    menuVisible, 
+    setMenuVisible,
+    setTemplateForEditor,
+    templateForEditor
+}) => {
+
+    const navigate = useNavigate();
 
     const [templateList, setTemplateList] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -64,6 +74,31 @@ const SavedTemplates = ({loginCredentials, setLoginCredentials, menuVisible, set
         setMenuVisible(!menuVisible);
     };
 
+    const handleCopyToClipboard = (id) => {
+        const templateElement = document.getElementById(id);
+        const range = document.createRange();
+        range.selectNode(templateElement);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+        alert("Template copied to clipboard!");
+    };
+
+    const sendToEditor = (templateId) => {
+
+        const extractedHtml = extractHtml(templateId);
+        console.log(extractedHtml);
+    
+        setTemplateForEditor(prev => {
+            let current = prev;
+            current.body.rows[0].columns[0].contents[0].values.text = extractedHtml;
+            return prev;
+        });
+    
+        navigate("/profile/template-editor");
+    };
+
     return (
         <>
             <div className={`profile_page-main-content ${menuVisible ? 'menu-visible' : ''}`}>
@@ -81,7 +116,13 @@ const SavedTemplates = ({loginCredentials, setLoginCredentials, menuVisible, set
                             </div>
                         ) : templateList.length > 0 ? (
                             templateList.map((templateObj, index) => 
-                                <div className="template-container">
+                                <div className="template-container" style={{width: "fit-content"}}>
+                                    <button className="copy-button" onClick={() => handleCopyToClipboard(`Template-${index}`)}>
+                                        Copy to Clipboard
+                                    </button>
+                                    <button className="edit-button" onClick={() => sendToEditor(`Template-${index}`)}>
+                                        Edit Template
+                                    </button>
                                     <div id={`Template-${index}`}>
                                         <p>{`Template-${index}`}</p>
                                         <div 

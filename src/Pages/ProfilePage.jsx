@@ -61,42 +61,6 @@ const ProfilePage = ({
           return null;
         }
       }
-    
-    const saveToDatabase = async (templateId) => {
-    
-        console.log(loginCredentials)
-    
-        const extractedHtml = extractHtml(templateId);
-        if (extractedHtml === null) {
-        return;
-        }
-    
-        try {
-        const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/template`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                user_id: loginCredentials.user_id,
-                template: extractedHtml,
-            }),
-        });
-    
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
-        }
-    
-        const data = await response.json();
-        
-        console.log('Successfully added template:', data);
-    
-        navigate('/profile');
-        } catch (error) {
-        console.error('Error:', error);
-        }
-    }
 
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);
@@ -148,6 +112,8 @@ const ProfilePage = ({
                         loginCredentials={loginCredentials} 
                         menuVisible={menuVisible} 
                         setMenuVisible={setMenuVisible}
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
                     />} 
                 />
                 <Route 

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "../Css/signup.css";
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
 
 const Signup = ({ loginCredentials, setLoginCredentials }) => {
     const navigate = useNavigate();
+    const [isFading, setIsFading] = useState(false);
 
     const handleSuccess = (response) => {
         console.log('Login Success:', response);
@@ -17,34 +18,33 @@ const Signup = ({ loginCredentials, setLoginCredentials }) => {
     };
 
     const handleSubmit = async (event) => {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-  
-      try {
-          const response = await fetch('https://email-template-generator-backend.vercel.app/register', { // Updated to Vercel serverless function
-              method: 'POST',
-              body: formData
-          });
-  
-          if (response.ok) {
-              document.getElementById('form-feedback').classList.remove('hidden');
-              form.reset();
-              // Redirect to login page after successful signup
-              navigate('/login');
-          } else {
-              const errorData = await response.json();
-              console.error('Error:', errorData);
-          }
-      } catch (error) {
-          console.error('Error:', error);
-      }
-  };
-  
-      
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('https://email-template-generator-backend.vercel.app/register', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                document.getElementById('form-feedback').classList.remove('hidden');
+                form.reset();
+                // Add fade-out effect and then navigate
+                setIsFading(true);
+                setTimeout(() => navigate('/login'), 500); // Matches the fade-out duration
+            } else {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
-        <div className="signup-container">
+        <div className={`signup-container ${isFading ? 'fade-out' : ''}`}>
             <div className="signup-form">
                 <h1>Create an Account</h1>
                 <form id="signup-form" onSubmit={handleSubmit}>
@@ -68,7 +68,10 @@ const Signup = ({ loginCredentials, setLoginCredentials }) => {
                     <div id="form-feedback" className="hidden">Sign up successful!</div>
                 </form>
                 <p>Already have an account? <span 
-                    onClick={() => navigate("/login")} 
+                    onClick={() => {
+                        setIsFading(true);
+                        setTimeout(() => navigate("/login"), 500); // Matches the fade-out duration
+                    }} 
                     style={{
                         cursor: "pointer",
                         color: "blue",

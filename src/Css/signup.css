@@ -1,58 +1,75 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-image: url('../Media/bkg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .signup-container {
-    background-color: #ffffff;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    border-radius: 12px;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .signup-form h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 24px;
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #666;
 }
 
 .form-group input {
-    width: 94%;
-    padding: 10px;
+    width: 100%;
+    padding: 14px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    font-size: 16px;
+    color: #333;
 }
 
 .signup-button {
-    background-color: #007bff;
+    background-color: #0056b3;
     color: white;
-    padding: 10px 20px;
+    padding: 14px;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    border-radius: 5px;
     width: 100%;
-    font-size: 16px;
+    font-size: 18px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .signup-button:hover {
     background-color: #0056b3;
+    transform: translateY(-3px);
 }
 
 .hidden {
@@ -61,5 +78,12 @@ body {
 
 #form-feedback {
     margin-top: 20px;
-    color: green;
+    background-color: #0056b3;
+    font-size: 16px;
+    text-align: center;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }

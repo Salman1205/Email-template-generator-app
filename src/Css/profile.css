@@ -2,13 +2,6 @@
     font-family: "Montserrat", sans-serif;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    overflow-y: scroll; 
-}
-
 .profile_page-container {
     display: flex;
     width: 100vw;
@@ -110,12 +103,6 @@ body {
     margin-left: 350px;
 }
 
-.profile_page-main-content-body {
-    position: relative;
-    padding: 20px;
-    width: 100%;
-}
-
 .profile_page-additional-content {
     flex-grow: 1;
     padding: 20px;
@@ -137,7 +124,11 @@ h1 {
 }
 
 .profile_page-form-section {
-    margin-bottom: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
 }
 
 .profile_page-form-section label {
@@ -150,24 +141,6 @@ h1 {
     max-height: 100px;
     display: block;
     margin-bottom: 10px;
-}
-
-.profile_page-save-changes {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.profile_page-save-changes:hover {
-    background-color: #0056b3;
-}
-
-.profile_page-hidden {
-    display: none;
 }
 
 #prompt-form {
@@ -229,33 +202,49 @@ h1 {
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #fff;
+    margin-bottom: 5rem; /* Ensure enough space at the bottom */
 }
 
-.template-options {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 100;
-}
-
-.copy-button,
-.edit-button {
-    background-color: #007bff;
+ .template-container .copy-button,
+.template-container .edit-button {
+    background: none;
     border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 5px 5px;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.copy-button:hover,
-.edit-button:hover {
-    background-color: #0056b3;
+.template-container .copy-button i,
+.template-container .edit-button i {
+    color: inherit;
+}
+
+.template-container .copy-button:hover,
+.template-container .edit-button:hover {
+    color: black; /* Color on hover */
+} 
+
+.template-container .toggle-template,.template-container .copy-button,
+.template-container .edit-button {
+    font-size: 1.5rem; 
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.3s ease-in-out;
+    margin-left: 5.2rem;
+    opacity: 0.9;
+}
+
+.template-container .rotate-right {
+    transform: rotate(0deg); /* Default state */
+}
+
+.template-container .rotate-left {
+    transform: rotate(180deg); /* Rotated state */
+}
+
+.template-container .toggle-template:hover {
+    color: black; /* Color on hover */
 }
 
 /* New styling for prompt section */
@@ -276,5 +265,42 @@ h1 {
 }
 
 .prompt-section.slide-right {
-    transform: translateX(100%); 
+    margin-left: 2rem;
+}
+/* New form section styling */
+.social-links-section {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.social-links-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.social-links-section .form-group {
+    margin-bottom: 15px;
+}
+
+.social-links-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.social-links-section input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.social-links-section .form-group:last-child {
+    margin-bottom: 0;
 }
