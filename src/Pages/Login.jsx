@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import "../Css/login.css";
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +11,7 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError(''); // Clear previous error messages
 
         try {
             const formData = new URLSearchParams();
@@ -25,16 +26,10 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
                 body: formData,
             });
 
-            if (!response.ok) {
-                // Handle non-2xx HTTP responses
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'An error occurred.');
-            }
-
             const data = await response.json();
-            console.log('Response data:', data);
+            console.log('Response data:', data); // Log response data
 
-            if (data.message === 'Login successful!') {
+            if (response.ok && data.message === 'Login successful!') {
                 console.log('Login successful:', data);
                 setLoginCredentials(data);
                 navigate('/profile');
@@ -57,26 +52,22 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
                             <label htmlFor="email">Email</label>
                             <input
                                 type="email"
-                                id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="email"
-                                required
                             />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <input
                                 type="password"
-                                id="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="password"
-                                required
                             />
                         </div>
                         <button type="submit" className="login-button">Login</button>
-                        {error && <div className="error-message">{error}</div>}
+                        {error && <div className="error-message">{error}</div>} {/* Display error message */}
                     </form>
                     <p>Don't have an account? <span 
                         onClick={() => navigate("/signup")}
