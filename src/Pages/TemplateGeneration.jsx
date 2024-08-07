@@ -1,301 +1,128 @@
-import React, { useRef, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import "../Css/templateGeneration.css";
+import React, { useState, useRef } from 'react';
+import dummy from "../Media/dummy.png";
 import Template1 from '../Components/Template1.jsx';
-import Template2 from '../Components/Template2.jsx';
-import InputSection from '../Components/InputSection.jsx';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "../Css/profile.css";
 
-import juice from 'juice';
+const TemplateGeneration = ({menuVisible, setMenuVisible}) => {
 
-const TemplateGeneration = ({ setTemplateForEditor }) => {
+    const navigate = useNavigate();
 
-  const navigate=useNavigate();
+    const [formFeedback, setFormFeedback] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(dummy);
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
+    const promptRef = useRef(null);
 
-  const prompt = useRef(null);
-  const [urlForShop, setUrlFromShop] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
 
-  const [result, setResult] = useState({
-    description: "the description",
-    promo: "PROMOOOO",
-    subject: "the main thing",
-    image_url: "",
-  });
-
-  const setResultToDefault = () => {
-    setResult({
-      description: "",
-      promo: "",
-      subject: "",
-      image_url: "",
-    });
-  };
-
-  const handleSendPrompt = () => {
-    const Obj = {
-      "query": prompt.current.value,
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setFormFeedback(true);
+        setTimeout(() => {
+            setFormFeedback(false);
+        }, 3000);
     };
-    console.log(Obj);
-    fetch('https://ai-email-template-backend.vercel.app/query', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(Obj),
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      setResult(data);
-    });
-  };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert('Please upload a valid image file.');
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setUploadedImage(null);
-  };
-
-  const handleCopyToClipboard = (templateId) => {
-    const templateElement = document.getElementById(templateId);
-    const range = document.createRange();
-    range.selectNode(templateElement);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-    alert("Template copied to clipboard!");
-  };
-
-  const extractHtml = (templateId) => {
-    const element = document.getElementById(templateId);
-    if (element) {
-      const htmlWithInlineStyles = juice(element.outerHTML);
-      return htmlWithInlineStyles;
-    } else {
-      console.error(`Element with ID ${templateId} not found.`);
-      return null;
-    }
-  }
-
-  const sendToEditor = (templateId) => {
-
-    const extractedHtml = extractHtml(templateId);
-    console.log(extractedHtml);
-
-    const design = convertHtmlToUnlayerDesign(extractedHtml);
-
-    setTemplateForEditor(design);
-    navigate("/template-editor");
-  };
-
-  const convertHtmlToUnlayerDesign = (html) => {
-    return {
-      "counters": {
-          "u_column": 1,
-          "u_row": 1
-      },
-      "body": {
-          "id": "NfIZ1jM7Ot",
-          "rows": [
-              {
-                  "id": "BeViTx_Z5m",
-                  "cells": [
-                      1
-                  ],
-                  "columns": [
-                      {
-                          "id": "ObTG2DpJDl",
-                          "contents": [
-                              {
-                                  "id": "text_block_1",
-                                  "type": "html",
-                                  "values": {
-                                      "html": html
-                                  }
-                              }
-                          ],
-                          "values": {
-                              "backgroundColor": "",
-                              "padding": "0px",
-                              "border": {},
-                              "borderRadius": "0px",
-                              "_meta": {
-                                  "htmlID": "u_column_1",
-                                  "htmlClassNames": "u_column"
-                              }
-                          }
-                      }
-                  ],
-                  "values": {
-                      "displayCondition": null,
-                      "columns": false,
-                      "backgroundColor": "",
-                      "columnsBackgroundColor": "",
-                      "backgroundImage": {
-                          "url": "",
-                          "fullWidth": true,
-                          "repeat": "no-repeat",
-                          "size": "custom",
-                          "position": "center",
-                          "customPosition": [
-                              "50%",
-                              "50%"
-                          ]
-                      },
-                      "padding": "0px",
-                      "anchor": "",
-                      "hideDesktop": false,
-                      "_meta": {
-                          "htmlID": "u_row_1",
-                          "htmlClassNames": "u_row"
-                      },
-                      "selectable": true,
-                      "draggable": true,
-                      "duplicatable": true,
-                      "deletable": true,
-                      "hideable": true
-                  }
-              }
-          ],
-          "headers": [],
-          "footers": [],
-          "values": {
-              "popupPosition": "center",
-              "popupWidth": "600px",
-              "popupHeight": "auto",
-              "borderRadius": "10px",
-              "contentAlign": "center",
-              "contentVerticalAlign": "center",
-              "contentWidth": "500px",
-              "fontFamily": {
-                  "label": "Arial",
-                  "value": "arial,helvetica,sans-serif"
-              },
-              "textColor": "#000000",
-              "popupBackgroundColor": "#FFFFFF",
-              "popupBackgroundImage": {
-                  "url": "",
-                  "fullWidth": true,
-                  "repeat": "no-repeat",
-                  "size": "cover",
-                  "position": "center"
-              },
-              "popupOverlay_backgroundColor": "rgba(0, 0, 0, 0.1)",
-              "popupCloseButton_position": "top-right",
-              "popupCloseButton_backgroundColor": "#DDDDDD",
-              "popupCloseButton_iconColor": "#000000",
-              "popupCloseButton_borderRadius": "0px",
-              "popupCloseButton_margin": "0px",
-              "popupCloseButton_action": {
-                  "name": "close_popup",
-                  "attrs": {
-                      "onClick": "document.querySelector('.u-popup-container').style.display = 'none';"
-                  }
-              },
-              "backgroundColor": "#F7F8F9",
-              "preheaderText": "",
-              "linkStyle": {
-                  "body": true,
-                  "linkColor": "#0000ee",
-                  "linkHoverColor": "#0000ee",
-                  "linkUnderline": true,
-                  "linkHoverUnderline": true
-              },
-              "backgroundImage": {
-                  "url": "",
-                  "fullWidth": true,
-                  "repeat": "no-repeat",
-                  "size": "custom",
-                  "position": "center"
-              },
-              "_meta": {
-                  "htmlID": "u_body",
-                  "htmlClassNames": "u_body"
-              }
-          }
-      },
-      "schemaVersion": 16
+    const toggleMenu = () => {
+        setMenuVisible(!menuVisible);
     };
-  };
 
-  return (
-    <div className="fullScreen">
-      <header className='header'>Template Generation</header>
-      <div className="mainContainer">
+    const handleLogoChange = (event) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setLogoPreview(e.target.result);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
 
-        {/* user input */}
-        <InputSection 
-          setUrlFromShop={setUrlFromShop} 
-          urlForShop={urlForShop} 
-          setResultToDefault={setResultToDefault}
-          handleSendPrompt={handleSendPrompt}
-          prompt={prompt}
-          handleFileChange={handleFileChange}
-          handleRemoveImage={handleRemoveImage}
-        />
+    const handleCopyToClipboard = (id) => {
+        const element = document.getElementById(id);
+        navigator.clipboard.writeText(element.innerText);
+        alert("Copied to clipboard");
+    };
 
-        {/* output */}
-        <div className="outputContainer">
-          {
-            (result.image_url || uploadedImage) && (
-            <>
-              <div className="template-container">
-                <Dropdown className="template-options">
-                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                    •••
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleCopyToClipboard('template1')}>
-                      Copy to Gmail
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => sendToEditor("template1")}>
-                      Send to Editor
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <div id="template1">
-                  <Template1 result={{ ...result, image_url: uploadedImage || result.image_url }} />
-                </div>
+    const sendToEditor = (id) => {
+        const element = document.getElementById(id);
+        navigate("/editor", { state: { content: element.innerHTML } });
+    };
+
+    const handlePromptSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const prompt = promptRef.current.value;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_QUERY_URL}/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: prompt }),
+            });
+            const data = await response.json();
+            setResult(data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+        setLoading(false);
+    };
+
+    return (
+        <>
+          <div className={`profile_page-main-content ${menuVisible ? 'menu-visible' : ''}`}>
+              <button className="profile_page-menu-toggle-outer" onClick={toggleMenu}>
+                  <i className="fa-solid fa-bars"></i>
+              </button>
+              <h1>Template Generation</h1>
+              <form id="brand-kit-form" onSubmit={handleSubmit}>
+                  <div className="profile_page-form-section">
+                      <label htmlFor="logo"><h5>Logo</h5></label>
+                      <img src={logoPreview} alt="Logo Preview" id="logo-preview" />
+                      <input type="file" id="logo" name="logo" accept="image/*" onChange={handleLogoChange} />
+                  </div>
+              </form>
+          </div>
+          <div className={`profile_page-additional-content ${menuVisible ? 'menu-visible' : ''}`}>
+              <h1 style={{ textAlign: "center" }}>Template Result</h1>
+              <div className="profile_page-result">
+                  {loading ? (
+                      <div className="d-flex justify-content-center align-items-center w-100">
+                          <div className="spinner-grow text-primary" role="status">
+                              <span className="visually-hidden">Loading...</span>
+                          </div>
+                      </div>
+                  ) : result ? (
+                      <div className="template-container">
+                          <button className="copy-button" onClick={() => handleCopyToClipboard('template1')}>
+                              Copy to Clipboard
+                          </button>
+                          <button className="edit-button" onClick={() => sendToEditor("template1")}>
+                              Edit Template
+                          </button>
+                          <div id="template1">
+                              <Template1 result={result} />
+                          </div>
+                      </div>
+                  ) : (
+                      <p>No result to display</p>
+                  )}
               </div>
-              <div className="template-container">
-                <Dropdown className="template-options">
-                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                    •••
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleCopyToClipboard('template2')}>
-                      Copy to Gmail
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => sendToEditor("template2")}>
-                      Send to Editor
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <div id="template2">
-                  <Template2 result={{ ...result, image_url: uploadedImage || result.image_url }} />
-                </div>
-              </div>
-            </>
-            )
-          }
-        </div>
-      </div>
-    </div>
-  );
+          </div>
+          <div className={`prompt-section ${menuVisible ? 'slide-right' : ''}`}>
+              <form id="prompt-form" onSubmit={handlePromptSubmit} className="profile_page-form-with-icon">
+                  <div className="profile_page-form-section">
+                      <div className="textarea-container">
+                          <textarea id="prompt" ref={promptRef} placeholder="Describe the email you'd like to create" />
+                          <button type="submit" className="profile_page-submit-icon" disabled={loading}>
+                              <i className="fa-solid fa-magnifying-glass"></i>
+                          </button>
+                      </div>
+                  </div>
+                  <div id="form-feedback" className={formFeedback ? '' : 'profile_page-hidden'}>Submitted successfully!</div>
+              </form>
+          </div>
+        </>
+    )
 }
 
 export default TemplateGeneration;

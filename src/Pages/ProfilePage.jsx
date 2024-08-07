@@ -1,112 +1,176 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import "../Css/profile.css";
-import stayaLogo from "../Media/stayaLogo.jpeg";
-import sample from "../Media/sample.png";
-import dummy from "../Media/dummy.jfif";
+import stayaLogo from "../Media/stayaLogo.png";
+import dummy from "../Media/dummy.png";
 import { useNavigate } from 'react-router-dom';
+import Editor from './Editor';
+import TemplateGeneration from './TemplateGeneration';
+import SavedTemplates from '../Components/SavedTemplates';
 
-const ProfilePage = () => {
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Outlet, Route, Routes, Navigate, Link } from 'react-router-dom';
+
+const ProfilePage = ({
+    loginCredentials, 
+    templateForEditor,
+    setTemplateForEditor
+}) => {
     const navigate = useNavigate();
-    const [logoPreview, setLogoPreview] = useState(dummy);
-    const [formFeedback, setFormFeedback] = useState(false);
 
-    const handleLogoChange = (event) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setLogoPreview(e.target.result);
-        };
-        reader.readAsDataURL(event.target.files[0]);
+    const [templateList, setTemplateList] = useState([]);
+    const [menuVisible, setMenuVisible] = useState(true);
+    
+    const getTemplates = async () => {
+
+        console.log(loginCredentials)
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/templates/${loginCredentials.user_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
+            }
+    
+            const data = await response.json();
+            console.log('Retrieved templates:', data.templates);
+            setTemplateList(data.templates);
+            return data;
+        } catch (error) {
+        console.error('Error:', error);
+        return null;
+        }
+
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        setFormFeedback(true);
-        setTimeout(() => {
-            setFormFeedback(false);
-        }, 3000);
-    };
-
-    const selectColor = (event) => {
-        document.querySelectorAll('.profile_page-color').forEach((color) => {
-            color.classList.remove('profile_page-selected-color');
+    const extractHtml = (templateId) => {
+        const element = document.getElementById(templateId);
+        if (element) {
+          const htmlWithInlineStyles = element.innerHTML;
+          console.log(htmlWithInlineStyles);
+          return htmlWithInlineStyles;
+        } else {
+          console.error(`Element with ID ${templateId} not found.`);
+          return null;
+        }
+      }
+    
+    const saveToDatabase = async (templateId) => {
+    
+        console.log(loginCredentials)
+    
+        const extractedHtml = extractHtml(templateId);
+        if (extractedHtml === null) {
+        return;
+        }
+    
+        try {
+        const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/template`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: loginCredentials.user_id,
+                template: extractedHtml,
+            }),
         });
-        event.target.classList.add('profile_page-selected-color');
+    
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+    
+        const data = await response.json();
+        
+        console.log('Successfully added template:', data);
+    
+        navigate('/profile');
+        } catch (error) {
+        console.error('Error:', error);
+        }
+    }
+
+    const toggleMenu = () => {
+        setMenuVisible(!menuVisible);
     };
 
     return (
-        <div className="profile_page-container">
+        <div className={`profile_page-container ${menuVisible ? 'menu-visible' : ''}`}>
             <Helmet>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
                     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-                    crossorigin="anonymous" referrerpolicy="no-referrer" />
+                    crossOrigin="anonymous" referrerPolicy="no-referrer" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                 <link
                     href="https://fonts.googleapis.com/css2?family=Abel&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
                     rel="stylesheet" />
             </Helmet>
-            <div className="profile_page-sidebar">
+            <div className={`profile_page-sidebar ${menuVisible ? 'visible' : ''}`}>
+                <button className="profile_page-menu-toggle" onClick={toggleMenu}>
+                    <i className="fa-solid fa-bars"></i>
+                </button>
                 <div className="profile_page-logo">
                     <img src={stayaLogo} alt="Sendif Logo" />
                 </div>
-                <button className="profile_page-new-design" onClick={() => navigate("/template-generation")}><i class="fa-solid fa-pen-to-square"></i>New Design</button>
+                <button className="profile_page-new-design" onClick={() => navigate("/profile/template-generation")}>
+                    <i className="fa-solid fa-pen-to-square"></i>New Design
+                </button>
                 <ul className="profile_page-menu">
-                    <li><a href="#" className='design-btn' style={{ backgroundColor: "white", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)" }}><i class="fa-solid fa-folder"></i>My Designs</a></li>
-                    <li><a href="#"><i class="fa-solid fa-wand-magic-sparkles"></i>Templates</a></li>
-                    <li><a href="#"><i class="fa-brands fa-slack"></i>Brand Kit</a></li>
+                    <li>
+                        <Link to="saved" className='design-btn' style={{ backgroundColor: "white", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.8)" }}>
+                            <i className="fa-solid fa-folder"></i>My Designs
+                        </Link>
+                    </li>
+                    <li><a href="#"><i className="fa-solid fa-wand-magic-sparkles"></i>Templates</a></li>
+                    <li><a href="#"><i className="fa-brands fa-slack"></i>Brand Kit</a></li>
                 </ul>
             </div>
-            <div className="profile_page-main-content">
-                <h1>Brand Kit</h1>
-                <form id="brand-kit-form" onSubmit={handleSubmit}>
-                    <div className="profile_page-form-section">
-                        <label htmlFor="logo">Logo</label>
-                        <img src={logoPreview} alt="Logo Preview" id="logo-preview" />
-                        <input type="file" id="logo" name="logo" accept="image/*" onChange={handleLogoChange} />
-                    </div>
-                    <div className="profile_page-form-section">
-                        <label htmlFor="brand-story">Can you please let us know how and why you came up with your brand?</label>
-                        <textarea id="brand-story" name="brand-story"></textarea>
-                    </div>
-                    <div className="profile_page-form-section">
-                        <label htmlFor="bestselling-products">What are your bestselling products and the features you would like to highlight?</label>
-                        <textarea id="bestselling-products" name="bestselling-products"></textarea>
-                    </div>
-                    <div className="profile_page-form-section">
-                        <label htmlFor="marketing-goals">What are your email marketing goals, if any, other than to drive sales?</label>
-                        <textarea id="marketing-goals" name="marketing-goals"></textarea>
-                    </div>
-                    <div className="profile_page-colors">
-                        <h2>Colors</h2>
-                        <div className="profile_page-color-palette">
-                            <div className="profile_page-color" style={{ backgroundColor: "#E9E2E2" }} onClick={selectColor}></div>
-                            <div className="profile_page-color" style={{ backgroundColor: "#4F0505" }} onClick={selectColor}></div>
-                            <div className="profile_page-color" style={{ backgroundColor: "#187918" }} onClick={selectColor}></div>
-                        </div>
-                    </div>
-                    <button type="submit" className="profile_page-save-changes">Save Changes</button>
-                    <div id="form-feedback" className={formFeedback ? '' : 'profile_page-hidden'}>Form submitted successfully!</div>
-                </form>
-            </div>
-            <div className="profile_page-additional-content">
-                <h2>Tips & Guidelines</h2>
-                <div className="profile_page-tips">
-                    <ul>
-                        <li>Ensure your logo is clear and represents your brand identity.</li>
-                        <li>Choose colors that align with your brand message.</li>
-                        <li>Highlight the key features of your products.</li>
-                    </ul>
-                </div>
-                <h2>Testimonials</h2>
-                <div className="profile_page-testimonials">
-                    <p>"This tool has made our branding process so much easier!" - Jane Doe</p>
-                    <p>"The live preview feature is a game-changer." - John Smith</p>
-                </div>
-                <div className="profile_page-gallery">
-                    <img src={sample} alt="Sample" />
-                </div>
-            </div>
+            <Routes>
+                <Route 
+                    path="" 
+                    element={<Navigate 
+                        to="template-generation" 
+                        replace
+                    />} 
+                />
+                <Route 
+                    path="template-generation" 
+                    element={<TemplateGeneration 
+                        loginCredentials={loginCredentials} 
+                        menuVisible={menuVisible} 
+                        setMenuVisible={setMenuVisible}
+                    />} 
+                />
+                <Route 
+                    path="template-editor" 
+                    element={<Editor 
+                        loginCredentials={loginCredentials} 
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
+                    />}
+                />
+                <Route 
+                    path="saved" 
+                    element={<SavedTemplates 
+                        loginCredentials={loginCredentials} 
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
+                        menuVisible={menuVisible}
+                        setMenuVisible={setMenuVisible}
+                    />} 
+                />
+            </Routes>
+            <Outlet/>
+            {/* <TemplateGeneration loginCredentials={loginCredentials} menuVisible={menuVisible} setMenuVisible={setMenuVisible}/> */}
         </div>
     );
 };

@@ -1,3 +1,4 @@
+
 * {
     box-sizing: border-box; /* this includes border and margins to size */
 }
@@ -5,11 +6,13 @@
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
+    /* background-color: #121212; */
+    /* color: #e0e0e0; */
     overflow: hidden;
 }
-
+.inputContainer p{
+    color: white;
+}
 .fullScreen {
     display: flex;
     flex-direction: column;
@@ -39,7 +42,8 @@ body {
     height: 100%;
     padding: 20px;
     gap: 20px;
-    overflow-y: auto;
+    background: linear-gradient(135deg, #2c3e50, #3498db); /* Added gradient background */
+    overflow-y:auto ;
 }
 
 .inputContainer {
@@ -53,7 +57,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border-right: 2px solid #444;
     transition: transform 0.3s ease;
-    height: 100vh;
+    height: 150vh;
 }
 
 .inputContainer:hover {
@@ -63,7 +67,6 @@ body {
 .outputContainer {
     display: flex;
     height: fit-content;
-    /* flex-direction: column; */
     gap: 1em;
     width: 100%;
     padding: 20px;
@@ -71,6 +74,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease;
+    height: 150vh;
 }
 
 .outputContainer:hover {
@@ -109,7 +113,7 @@ body {
 }
 
 .button {
-    background-color: #6c757d; /* Gray background */
+    background-color: #ff6347; /* Gray background */
     color: white; /* White text */
     padding: 10px 20px;
     border: none;
@@ -156,8 +160,34 @@ input[type="text"]:focus, input[type="email"]:focus {
     border-radius: 5px;
     font-size: 18px;
     cursor: pointer;
-  }
-   
-  .remove-image-button:hover {
-    background-color: #e5533b;
-  }
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.remove-image-button:hover {
+    background-color: #5a6268 ;
+    transform: translateY(-2px);
+}
+
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 24px;
+    color: #00acc1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.template-container {
+    position: relative;
+}
+
+.template-options {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}

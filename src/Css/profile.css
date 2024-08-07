@@ -1,19 +1,19 @@
-*{
+* {
     font-family: "Montserrat", sans-serif;
 }
+
 body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
     overflow-y: scroll; 
 }
-.profile_page-form-section{
-    /* font-weight: bold; */
-}
+
 .profile_page-container {
     display: flex;
     width: 100vw;
     height: 100vh;
+    position: relative;
 }
 
 .profile_page-sidebar {
@@ -22,10 +22,29 @@ body {
     width: 350px;
     height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: -350px;
+    transition: left 0.3s ease-in-out;
+}
+
+.profile_page-sidebar.visible {
+    left: 0;
 }
 
 .profile_page-logo img {
     width: 100%;
+}
+
+.profile_page-menu-toggle,
+.profile_page-menu-toggle-outer {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin: 1rem 0;
+    top: 20px;
+    left: 20px;
+    z-index: 3;
 }
 
 .profile_page-new-design {
@@ -41,11 +60,13 @@ body {
     padding: 0.5rem;
     opacity: 0.8;
 }
-.profile_page-new-design:hover{
+
+.profile_page-new-design:hover {
     opacity: 1;
 }
-.profile_page-new-design i{
-    margin:0 0.5rem;
+
+.profile_page-new-design i {
+    margin: 0 0.5rem;
 }
 
 .profile_page-menu {
@@ -67,163 +88,193 @@ body {
     border-radius: 5px;
     font-weight: bold;
 }
-.profile_page-menu i{
+
+.profile_page-menu i {
     margin: 0 0.5rem;
 }
+
 .profile_page-main-content {
     flex-grow: 1;
     padding: 20px;
-    width: calc(50% - 40px);
+    width: 50%;
     box-sizing: border-box;
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    margin-left: 0;
+}
+
+.profile_page-main-content.menu-visible i {
+    display: none;
+}
+
+.profile_page-main-content.menu-visible {
+    margin-left: 350px;
+}
+
+.profile_page-main-content-body {
+    position: relative;
+    padding: 20px;
+    width: 100%;
 }
 
 .profile_page-additional-content {
     flex-grow: 1;
     padding: 20px;
-    width: calc(50% - 40px);
+    width: 50%;
     box-sizing: border-box;
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    margin-right: 25rem;
+    margin-top: 4rem;
 }
 
-h1, h2 {
+.profile_page-additional-content.menu-visible {
+    margin-top: 2rem;
+}
+
+h1 {
     font-size: 24px;
-    margin-bottom: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .profile_page-form-section {
     margin-bottom: 20px;
 }
 
-label {
+.profile_page-form-section label {
     display: block;
     margin-bottom: 5px;
 }
 
-input[type="file"], textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-textarea {
-    resize: vertical;
-    height: 100px;
+#logo-preview {
+    max-width: 100px;
+    max-height: 100px;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .profile_page-save-changes {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
-    padding: 10px 20px;
     border: none;
+    padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: bold;
 }
 
-.profile_page-colors {
-    margin-top: 20px;
-    margin-bottom: 25px;
-}
-
-.profile_page-color-palette {
-    display: flex;
-    gap: 10px;
-}
-
-.profile_page-color {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-}
-
-.profile_page-tips, .profile_page-testimonials{
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile_page-gallery img {
-    width: 100%;
-    height: 40em;
-    background: transparent;
-}
-
-#form-feedback {
-    margin-top: 20px;
-    color: green;
+.profile_page-save-changes:hover {
+    background-color: #0056b3;
 }
 
 .profile_page-hidden {
     display: none;
 }
 
-/* Ensuring the logo image size remains consistent */
-#logo-preview {
-    max-width: 100%;
-    height: auto;
-    max-height: 150px;
-    display: block;
-    margin-top: 10px;
+#prompt-form {
+    margin-top: 1em;
 }
 
-/* Selected color style */
-.profile_page-selected-color {
-    border: 3px solid black;
+#prompt {
+    width: calc(100% - 40px); /* Full width minus the space for the icon */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    resize: vertical;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin: 0; /* No additional margin */
+    height: 3rem;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 1200px) {
-    .profile_page-container {
-        flex-direction: column;
-    }
-
-    .profile_page-sidebar {
-        width: 100%;
-        height: auto;
-        box-shadow: none;
-    }
-
-    .profile_page-main-content,
-    .profile_page-additional-content {
-        width: 100%;
-    }
+.textarea-container {
+    position: relative;
+    width: 100%; /* Ensure the container takes full width */
 }
 
-@media (max-width: 768px) {
-    h1, h2 {
-        font-size: 20px;
-    }
-
-    .profile_page-new-design {
-        height: auto;
-        padding: 15px;
-    }
-
-    .profile_page-menu li {
-        margin-bottom: 20px;
-    }
-
-    .profile_page-gallery img {
-        height: auto;
-    }
+.profile_page-submit-icon {
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
 }
 
-@media (max-width: 576px) {
-    h1, h2 {
-        font-size: 18px;
-    }
+.profile_page-submit-icon i {
+    color: #007bff;
+}
 
-    .profile_page-new-design {
-        font-size: 14px;
-    }
+.profile_page-submit-icon:hover i {
+    color: #0056b3;
+}
 
-    label, input[type="file"], textarea, .profile_page-save-changes {
-        font-size: 14px;
-    }
+.profile_page-result {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-    .profile_page-color {
-        width: 40px;
-        height: 40px;
-    }
+.profile_page-result h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.template-container {
+    position: relative;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.template-options {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
+
+.copy-button,
+.edit-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 5px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.copy-button:hover,
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+/* New styling for prompt section */
+.prompt-section {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50vw; /* 50% of viewport width */
+    background-color: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    padding: 0px 0.5rem; /* Add some padding to the section */
+    height: 4.5rem; /* Adjust height to make it less tall */
+    padding-left: 0.8rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.prompt-section.slide-right {
+    transform: translateX(100%); 
 }
