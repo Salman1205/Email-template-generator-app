@@ -11,7 +11,7 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Clear previous error messages
+        setError(''); 
 
         try {
             const formData = new URLSearchParams();

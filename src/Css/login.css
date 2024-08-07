@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('../Media/bkg.png');
+    /* background-image: url('../Media/bkg.png'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
