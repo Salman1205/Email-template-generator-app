@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import "../Css/profile.css";
 import stayaLogo from "../Media/stayaLogo.png";
+import dummy from "../Media/dummy.png";
 import { useNavigate } from 'react-router-dom';
 import Editor from './Editor';
 import TemplateGeneration from './TemplateGeneration';
 import SavedTemplates from '../Components/SavedTemplates';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Outlet, Route, Routes, Navigate, Link } from 'react-router-dom';
 
 const ProfilePage = ({
@@ -17,10 +16,9 @@ const ProfilePage = ({
     setTemplateForEditor
 }) => {
     const navigate = useNavigate();
-
     const [templateList, setTemplateList] = useState([]);
     const [menuVisible, setMenuVisible] = useState(true);
-    
+
     const getTemplates = async () => {
         console.log(loginCredentials);
         try {
@@ -30,18 +28,28 @@ const ProfilePage = ({
                     'Content-Type': 'application/json',
                 },
             });
-    
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Error: ${response.status} ${response.statusText} - ${errorText}`);
             }
-    
             const data = await response.json();
             console.log('Retrieved templates:', data.templates);
             setTemplateList(data.templates);
             return data;
         } catch (error) {
             console.error('Error:', error);
+            return null;
+        }
+    };
+
+    const extractHtml = (templateId) => {
+        const element = document.getElementById(templateId);
+        if (element) {
+            const htmlWithInlineStyles = element.innerHTML;
+            console.log(htmlWithInlineStyles);
+            return htmlWithInlineStyles;
+        } else {
+            console.error(`Element with ID ${templateId} not found.`);
             return null;
         }
     };
@@ -69,7 +77,8 @@ const ProfilePage = ({
                 <div className="profile_page-logo">
                     <img src={stayaLogo} alt="Sendif Logo" />
                 </div>
-                <div className="welcome-message">
+                 {/* Welcome message */}
+                 <div className="profile_page-welcome-message">
                     Welcome, {loginCredentials.username}!
                 </div>
                 <button className="profile_page-new-design" onClick={() => navigate("/profile/template-generation")}>
@@ -85,46 +94,44 @@ const ProfilePage = ({
                     <li><a href="#"><i className="fa-brands fa-slack"></i>Brand Kit</a></li>
                 </ul>
             </div>
-            <div className={`profile_page-main-content ${menuVisible ? 'menu-visible' : ''}`}>
-                <Routes>
-                    <Route 
-                        path="" 
-                        element={<Navigate 
-                            to="template-generation" 
-                            replace
-                        />} 
-                    />
-                    <Route 
-                        path="template-generation" 
-                        element={<TemplateGeneration 
-                            loginCredentials={loginCredentials} 
-                            menuVisible={menuVisible} 
-                            setMenuVisible={setMenuVisible}
-                            templateForEditor={templateForEditor} 
-                            setTemplateForEditor={setTemplateForEditor}
-                        />} 
-                    />
-                    <Route 
-                        path="template-editor" 
-                        element={<Editor 
-                            loginCredentials={loginCredentials} 
-                            templateForEditor={templateForEditor} 
-                            setTemplateForEditor={setTemplateForEditor}
-                        />}
-                    />
-                    <Route 
-                        path="saved" 
-                        element={<SavedTemplates 
-                            loginCredentials={loginCredentials} 
-                            templateForEditor={templateForEditor} 
-                            setTemplateForEditor={setTemplateForEditor}
-                            menuVisible={menuVisible}
-                            setMenuVisible={setMenuVisible}
-                        />} 
-                    />
-                </Routes>
-                <Outlet/>
-            </div>
+            <Routes>
+                <Route 
+                    path="" 
+                    element={<Navigate 
+                        to="template-generation" 
+                        replace
+                    />} 
+                />
+                <Route 
+                    path="template-generation" 
+                    element={<TemplateGeneration 
+                        loginCredentials={loginCredentials} 
+                        menuVisible={menuVisible} 
+                        setMenuVisible={setMenuVisible}
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
+                    />} 
+                />
+                <Route 
+                    path="template-editor" 
+                    element={<Editor 
+                        loginCredentials={loginCredentials} 
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
+                    />}
+                />
+                <Route 
+                    path="saved" 
+                    element={<SavedTemplates 
+                        loginCredentials={loginCredentials} 
+                        templateForEditor={templateForEditor} 
+                        setTemplateForEditor={setTemplateForEditor}
+                        menuVisible={menuVisible}
+                        setMenuVisible={setMenuVisible}
+                    />} 
+                />
+            </Routes>
+            <Outlet/>
         </div>
     );
 };

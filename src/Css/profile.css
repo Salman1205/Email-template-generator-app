@@ -1,3 +1,4 @@
+
 * {
     font-family: "Montserrat", sans-serif;
 }
@@ -22,14 +23,6 @@
 
 .profile_page-sidebar.visible {
     left: 0;
-}
-
-.welcome-message {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
 }
 
 .profile_page-logo img {
@@ -311,4 +304,12 @@ h1 {
 
 .social-links-section .form-group:last-child {
     margin-bottom: 0;
+}
+.profile_page-welcome-message {
+    padding: 15px;
+    color: #2c3e50; /* Darker text color for better readability */
+    font-size: 1.2rem;
+    font-weight: 600; /* Semi-bold text for emphasis */
+    text-align: center;
+    margin-top: 10px; /* Space above the welcome message */    
 }
