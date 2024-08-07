@@ -6,10 +6,18 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+.fullScreen {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
     background-image: url('../Media/bkg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    justify-content: center;
 }
 
 .login-container {
@@ -18,11 +26,14 @@ body {
     border-radius: 12px;
     width: 100%;
     max-width: 600px;
+    /* height: 700px; */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-self: center;
+    justify-self: center;
 }
 
 .login-form h1 {
