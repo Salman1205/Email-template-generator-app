@@ -42,38 +42,40 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-form">
-                <h1>Login to Your Account</h1>
-                <form id="login-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="email"
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="password"
-                        />
-                    </div>
-                    <button type="submit" className="login-button">Login</button>
-                    {error && <div className="error-message">{error}</div>} {/* Display error message */}
-                </form>
-                <p>Don't have an account? <span 
-                    onClick={() => navigate("/signup")}
-                    style={{
-                        cursor: "pointer",
-                        color: "blue",
-                    }}
-                >Sign up here</span></p>
+        <div className="fullScreen">
+            <div className="login-container">
+                <div className="login-form">
+                    <h1>Login to Your Account</h1>
+                    <form id="login-form" onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="email"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="password"
+                            />
+                        </div>
+                        <button type="submit" className="login-button">Login</button>
+                        {error && <div className="error-message">{error}</div>} {/* Display error message */}
+                    </form>
+                    <p>Don't have an account? <span 
+                        onClick={() => navigate("/signup")}
+                        style={{
+                            cursor: "pointer",
+                            color: "blue",
+                        }}
+                    >Sign up here</span></p>
+                </div>
             </div>
         </div>
     );

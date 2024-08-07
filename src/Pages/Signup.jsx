@@ -44,44 +44,46 @@ const Signup = ({ loginCredentials, setLoginCredentials }) => {
     };
 
     return (
-        <div className={`signup-container ${isFading ? 'fade-out' : ''}`}>
-            <div className="signup-form">
-                <h1>Create an Account</h1>
-                <form id="signup-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" id="username" name="username" required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id="email" name="email" required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" id="password" name="password" required />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required />
-                    </div>
-                    <button type="submit" className="signup-button">Sign Up</button>
-                    <div id="form-feedback" className="hidden">Sign up successful!</div>
-                </form>
-                <p>Already have an account? <span 
-                    onClick={() => {
-                        setIsFading(true);
-                        setTimeout(() => navigate("/login"), 500); // Matches the fade-out duration
-                    }} 
-                    style={{
-                        cursor: "pointer",
-                        color: "blue",
-                    }}
-                >Login here</span></p>
-                <GoogleLogin
-                    onSuccess={handleSuccess}
-                    onFailure={handleFailure}
-                    buttonText="Login with Google"
-                />
+        <div className="fullScreen">
+            <div className={`signup-container ${isFading ? 'fade-out' : ''}`}>
+                <div className="signup-form">
+                    <h1>Create an Account</h1>
+                    <form id="signup-form" onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" id="username" name="username" required />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input type="email" id="email" name="email" required />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input type="password" id="password" name="password" required />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" required />
+                        </div>
+                        <button type="submit" className="signup-button">Sign Up</button>
+                        <div id="form-feedback" className="hidden">Sign up successful!</div>
+                    </form>
+                    <p>Already have an account? <span 
+                        onClick={() => {
+                            setIsFading(true);
+                            setTimeout(() => navigate("/login"), 500); // Matches the fade-out duration
+                        }} 
+                        style={{
+                            cursor: "pointer",
+                            color: "blue",
+                        }}
+                    >Login here</span></p>
+                    <GoogleLogin
+                        onSuccess={handleSuccess}
+                        onFailure={handleFailure}
+                        buttonText="Login with Google"
+                    />
+                </div>
             </div>
         </div>
     );
