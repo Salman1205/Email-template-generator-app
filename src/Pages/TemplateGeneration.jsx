@@ -25,6 +25,13 @@ const TemplateGeneration = ({
         fileType: "",
         base64String: "",
     });
+    const [links, setLinks] = useState({
+        website: "",
+        instagram: "",
+        twitter: "",
+        facebook: "",
+        linkedin: "",
+    })
 
     
     const promptRef = useRef(null);
@@ -169,13 +176,20 @@ const TemplateGeneration = ({
         setIsTemplate1(!isTemplate1);
     };
 
+    const updateLink = (linkChange) => {
+        setLinks((prev) => ({
+            ...prev,
+            ...linkChange,
+        }))
+    }
+
     return (
         <>
             <div className={`profile_page-main-content ${menuVisible ? 'menu-visible' : ''}`}>
                 <button className="profile_page-menu-toggle-outer" onClick={toggleMenu}>
                     <i className="fa-solid fa-bars"></i>
                 </button>
-                <h1 style={{ marginLeft: "0.5rem" }}>Email Template Generator</h1>
+                <h1 style={{ marginLeft: "0.5rem" }}>Template Generation</h1>
                 <form id="brand-kit-form" onSubmit={handleSubmit}>
                     <div className="profile_page-form-section">
                         <label htmlFor="logo"><h5>Logo</h5></label>
@@ -187,23 +201,23 @@ const TemplateGeneration = ({
                     <h2>Social Links</h2>
                     <div className="form-group">
                         <label htmlFor="website">Website</label>
-                        <input type="text" id="website" placeholder="Enter your website URL" />
+                        <input type="text" id="website" placeholder="Enter your website URL" onChange={(e) => updateLink({website: e.target.value})} value={links.website}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="instagram">Instagram</label>
-                        <input type="text" id="instagram" placeholder="Enter your Instagram URL" />
+                        <input type="text" id="instagram" placeholder="Enter your Instagram URL" onChange={(e) => updateLink({instagram: e.target.value})} value={links.instagram}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="twitter">Twitter</label>
-                        <input type="text" id="twitter" placeholder="Enter your Twitter URL" />
+                        <input type="text" id="twitter" placeholder="Enter your Twitter URL" onChange={(e) => updateLink({twitter: e.target.value})} value={links.twitter}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="facebook">Facebook</label>
-                        <input type="text" id="facebook" placeholder="Enter your Facebook URL" />
+                        <input type="text" id="facebook" placeholder="Enter your Facebook URL" onChange={(e) => updateLink({facebook: e.target.value})} value={links.facebook}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="linkedin">LinkedIn</label>
-                        <input type="text" id="linkedin" placeholder="Enter your LinkedIn URL" />
+                        <input type="text" id="linkedin" placeholder="Enter your LinkedIn URL"onChange={(e) => updateLink({linkedin: e.target.value})} value={links.linkedin}/>
                     </div>
                 </div>
 
@@ -244,11 +258,19 @@ const TemplateGeneration = ({
                             {isTemplate1 ? 
                             (
                                 <div id="template1">
-                                    <Template1 result={result} logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} />
+                                    <Template1 
+                                        result={result} 
+                                        logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} 
+                                        links={links}
+                                    />
                                 </div>
                             ) : (
                                 <div id="template2">
-                                    <Template2 result={result} logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} />
+                                    <Template2 
+                                        result={result} 
+                                        logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} 
+                                        links={links}
+                                    />
                                 </div>
                             )}
                     </div>

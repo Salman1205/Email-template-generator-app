@@ -90,15 +90,16 @@
 .profile_page-main-content {
     flex-grow: 1;
     padding: 20px;
-    width: 50%;
+    width: fit-content;
     box-sizing: border-box;
     transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
     margin-left: 0;
+
 }
 
-.profile_page-main-content.menu-visible i {
+/* .profile_page-main-content.menu-visible i {
     display: none;
-}
+} */
 
 .profile_page-main-content.menu-visible {
     margin-left: 350px;

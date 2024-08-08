@@ -10,9 +10,10 @@ const styles = {
   },
   logo: {
     width: '80px',
-    position: 'fixed',
+    position: "absolute",
     marginLeft: "0px",
     zIndex: 10,
+    borderRadius: "10px",
   },
   banner2EmailContainer: {
     height: 'fit-content',
@@ -97,7 +98,7 @@ const styles = {
   },
 };
 
-const Template2 = ({ result, logo }) => {
+const Template2 = ({ result, logo, links }) => {
   return (
     <div style={styles.banner2EmailContainer}>
          <Helmet>
@@ -131,14 +132,14 @@ const Template2 = ({ result, logo }) => {
       <div style={styles.banner2Main}>
         <h2 style={styles.banner2MainH2}>{result.promo}</h2>
         <p style={styles.banner2MainP}>{result.description}</p>
-        <a href={result.url} style={styles.banner2Button}>Shop Now</a>
+        <a href={links.website} target="_blank" rel="noopener noreferrer" style={styles.banner2Button}>Shop Now</a>
       </div>
       <div style={styles.banner2Footer}>
-        <a href="#" style={styles.banner2FooterA}><i className="fa-brands fa-edge"></i></a>
-        <a href="#" style={styles.banner2FooterA}><i className="fa-brands fa-instagram"></i></a>
-        <a href="#" style={styles.banner2FooterA}><i className="fa-brands fa-linkedin"></i></a>
-        <a href="#" style={styles.banner2FooterA}><i className="fa-brands fa-twitter"></i></a>
-        <a href="#" style={styles.banner2FooterA}><i className="fa-brands fa-facebook"></i></a>
+        <a href={links.website || "#"} target="_blank" rel="noopener noreferrer" style={styles.banner2FooterA}><i className="fa-brands fa-edge"></i></a>
+        <a href={links.instagram || "#"} target="_blank" rel="noopener noreferrer" style={styles.banner2FooterA}><i className="fa-brands fa-instagram"></i></a>
+        <a href={links.linkedin || "#"} target="_blank" rel="noopener noreferrer" style={styles.banner2FooterA}><i className="fa-brands fa-linkedin"></i></a>
+        <a href={links.twitter || "#"} target="_blank" rel="noopener noreferrer" style={styles.banner2FooterA}><i className="fa-brands fa-twitter"></i></a>
+        <a href={links.facebook || "#"} target="_blank" rel="noopener noreferrer" style={styles.banner2FooterA}><i className="fa-brands fa-facebook"></i></a>
       </div>
     </div>
   );

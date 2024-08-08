@@ -117,12 +117,14 @@ const SavedTemplates = ({
                         ) : templateList.length > 0 ? (
                             templateList.map((templateObj, index) => 
                                 <div className="template-container" style={{width: "fit-content"}}>
-                                    <button className="copy-button" onClick={() => handleCopyToClipboard(`Template-${index}`)}>
-                                        Copy to Clipboard
-                                    </button>
-                                    <button className="edit-button" onClick={() => sendToEditor(`Template-${index}`)}>
-                                        Edit Template
-                                    </button>
+                                    <div style={{display: "flex", gap: "2em"}}>
+                                        <button className="copy-button" onClick={() => handleCopyToClipboard(`Template-${index}`)} >
+                                            Copy to Clipboard
+                                        </button>
+                                        <button className="edit-button" onClick={() => sendToEditor(`Template-${index}`)}>
+                                            Edit Template
+                                        </button>
+                                    </div>
                                     <div id={`Template-${index}`}>
                                         <p>{`Template-${index}`}</p>
                                         <div 
@@ -131,11 +133,6 @@ const SavedTemplates = ({
                                     </div>
                                 </div>
                             )
-                            
-                            // <div className="template-container">
-                            //     <div id="template1">
-                            //     </div>
-                            // </div>
                         ) : (
                             <p>No result to display</p>
                         )}
@@ -144,12 +141,6 @@ const SavedTemplates = ({
 
             </div>
         </>
-        // <div style={{justifyContent: "center", justifySelf: "center"}}>
-        //     My Templates
-        //     {templateList.length > 0 && templateList.map((template) => {
-        //         return <div dangerouslySetInnerHTML={{ __html: template }} />
-        //     })}
-        // </div>
     )
 }
 

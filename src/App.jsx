@@ -22,7 +22,7 @@ function App() {
   });
 
   const [loginCredentials, setLoginCredentials] = useState({
-    user_id: 3,
+    user_id: 12,
     username: "",
     email: "",
     password: ""
