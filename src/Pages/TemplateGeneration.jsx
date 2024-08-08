@@ -175,7 +175,7 @@ const TemplateGeneration = ({
                 <button className="profile_page-menu-toggle-outer" onClick={toggleMenu}>
                     <i className="fa-solid fa-bars"></i>
                 </button>
-                <h1 style={{ marginLeft: "0.5rem" }}>Template Generation</h1>
+                <h1 style={{ marginLeft: "0.5rem" }}>Email Template Generator</h1>
                 <form id="brand-kit-form" onSubmit={handleSubmit}>
                     <div className="profile_page-form-section">
                         <label htmlFor="logo"><h5>Logo</h5></label>
