@@ -1,261 +1,320 @@
-import React, { useRef, useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import "../Css/templateGeneration.css";
+import React, { useState, useRef, useEffect } from 'react';
+import dummy from "../Media/dummy.png";
 import Template1 from '../Components/Template1.jsx';
 import Template2 from '../Components/Template2.jsx';
-import InputSection from '../Components/InputSection.jsx';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "../Css/profile.css";
 
-const jsonGenerators = {
-  // Arrow function to get button JSON with text and URL
-  getButton: (text, url) => ({
-      "id": null,
-      "type": "button",
-      "values": {
-          "text": text || "Click Me",
-          "href": url || "",
-      }
-  }),
+const TemplateGeneration = ({
+    menuVisible, 
+    setMenuVisible,
+    emplateForEditor, 
+    setTemplateForEditor,
+    loginCredentials
+}) => {
 
-  // Arrow function to get text JSON with text
-  getText: (text) => ({
-      "id": null,
-      "type": "text",
-      "values": {
-          "text": text || "This is a default text block.",
-      }
-  }),
+    const navigate = useNavigate();
 
-  // Arrow function to get image JSON with URL
-  getImage: (url) => ({
-      "id": null,
-      "type": "image",
-      "values": {
-          "src": {
-              "url": url || ""
-          },
-          "altText": "Default Image",
-      }
-  })
-};
-
-const TemplateGeneration = ({ setTemplateForEditor }) => {
-
-  const navigate=useNavigate();
-
-  const prompt = useRef(null);
-  const [urlForShop, setUrlFromShop] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
-
-  const [result, setResult] = useState({
-    description: "the description",
-    promo: "PROMOOOO",
-    subject: "the main thing",
-    image_url: "",
-  });
-
-  const setResultToDefault = () => {
-    setResult({
-      description: "",
-      promo: "",
-      subject: "",
-      image_url: "",
+    const [formFeedback, setFormFeedback] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(dummy);
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
+    const [isTemplate1, setIsTemplate1] = useState(true);
+    const [selectedLogo, setSelectedLogo] = useState({
+        fileType: "",
+        base64String: "",
     });
-  };
+    const [links, setLinks] = useState({
+        website: "",
+        instagram: "",
+        twitter: "",
+        facebook: "",
+        linkedin: "",
+    })
 
-  const handleSendPrompt = () => {
-    const Obj = {
-      "query": prompt.current.value,
+    
+    const promptRef = useRef(null);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setFormFeedback(true);
+        setTimeout(() => {
+            setFormFeedback(false);
+        }, 3000);
     };
-    console.log(Obj);
-    fetch('https://ai-email-template-backend.vercel.app', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(Obj),
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      setResult(data);
-    });
-  };
+    
+    const toggleMenu = () => {
+        setMenuVisible(!menuVisible);
+    };
+    
+    // useEffect(() => handleLogoChange(null));
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert('Please upload a valid image file.');
+    const createFileFromURL = async (url) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            // Create a File object with the Blob
+            return new File([blob], "default.png", { type: blob.type });
+        } catch (error) {
+            console.error('Error creating file from URL:', error);
+            return null;
+        }
+    };
+
+    const handleLogoChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1]; 
+                setLogoPreview(reader.result); 
+                setSelectedLogo({
+                    fileType: file.type,
+                    base64String: base64String
+                });
+        };
+        reader.readAsDataURL(file);
     }
-  };
+    };
 
-  const handleRemoveImage = () => {
-    setUploadedImage(null);
-  };
+    const handleCopyToClipboard = (id) => {
+        const templateElement = document.getElementById(id);
+        console.log(templateElement);
+    
+        if (!templateElement) {
+            alert("Element not found");
+            return;
+        }
+        
+        const range = document.createRange();
+        range.selectNode(templateElement);
 
-  const handleCopyToClipboard = (templateId) => {
-    const templateElement = document.getElementById(templateId);
-    const range = document.createRange();
-    range.selectNode(templateElement);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-    alert("Template copied to clipboard!");
-  };
+        // Remove any existing selections
+        window.getSelection().removeAllRanges();
 
-  const extractHtml = (templateId) => {
-    const element = document.getElementById(templateId);
-    if (element) {
-      const htmlWithInlineStyles = element.innerHTML;
-      console.log(htmlWithInlineStyles);
-      return htmlWithInlineStyles;
-    } else {
-      console.error(`Element with ID ${templateId} not found.`);
-      return null;
+        // Add the new range
+        window.getSelection().addRange(range);
+        
+        // Execute the copy command
+        try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+                alert("Template copied to clipboard!");
+            } else {
+                alert("Failed to copy template");
+            }
+        } catch (err) {
+            alert("Failed to copy template");
     }
-  }
 
-  const sendToEditor = (templateId) => {
+    // Clear the selection
+    window.getSelection().removeAllRanges();
+    };
 
-    const extractedHtml = extractHtml(templateId);
-    console.log(extractedHtml);
+    const extractHtml = (templateId) => {
+        const element = document.getElementById(templateId);
+        if (element) {
+        const htmlWithInlineStyles = element.outerHTML;
+        return htmlWithInlineStyles;
+        } else {
+        console.error(`Element with ID ${templateId} not found.`);
+        return null;
+        }
+    }
 
-    setTemplateForEditor(prev => {
-      let current = prev;
-      current.body.rows[0].columns[0].contents[0].values.text = extractedHtml;
-      return prev;
-    });
+    const sendToEditor = (templateId) => {
 
-    navigate("/template-editor");
-  };
+        const extractedHtml = extractHtml(templateId);
+        console.log(extractedHtml);
+    
+        setTemplateForEditor(prev => {
+            let current = prev;
+            current.body.rows[0].columns[0].contents[0].values.text = extractedHtml;
+            return prev;
+        });
+    
+        navigate("/profile/template-editor");
+    };
 
-  //working on this
-  const seperateOuterDivToEachChild = (html) => {
-    // Original container
-    const original = document.createElement("div");
-    original.innerHTML = html;
+    const handlePromptSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const prompt = promptRef.current.value;
+        try {
+            const response = await fetch(`${process.env.REACT_APP_QUERY_URL}/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: prompt }),
+            });
+            const data = await response.json();
+            setResult(data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+        setLoading(false);
+    };
 
-    console.log(original.firstElementChild);
+    const saveToDatabase = async (templateId) => {
+        console.log(loginCredentials);
+        const extractedHtml = extractHtml(templateId);
+        if (extractedHtml === null) {
+            return;
+        }
+    
+        try {
+            const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/template`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: loginCredentials.user_id,
+                    template: extractedHtml,
+                }),
+            });
+    
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to save template:', errorText);
+                alert('Failed to save template. Please try again.');
+                return;
+            }
+    
+            const data = await response.json();
+            alert('Successfully added template:', data);
+            navigate('/profile');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    };
+    
 
-    // Select all child nodes of the container
-    const children = Array.from(original.childNodes);
-    console.log("children: ", children);
-    // Create an array to hold the wrapped divs
-    const wrappedDivs = [];
+    const toggleTemplate = () => {
+        setIsTemplate1(!isTemplate1);
+    };
 
-    // Iterate through each child node and wrap it in a <div>
-    children.forEach(child => {
-        const wrapperDiv = document.createElement('div');
-        wrapperDiv.appendChild(child);
-        wrappedDivs.push(wrapperDiv.outerHTML);
-    });
-    // console.log("Original: ", html);
-    // console.log("Seperated: ", wrappedDivs);
+    const updateLink = (linkChange) => {
+        setLinks((prev) => ({
+            ...prev,
+            ...linkChange,
+        }))
+    }
 
-    return wrappedDivs;
-  }
-
-// Example usage
-const originalHtml = `
-    <div style="padding: 20px;">
-        <img 
-            src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixid=M3w2MzA3MDB8MHwxfHNlYXJjaHw4fHxkb2d8ZW58MHx8fHwxNzIyMzI3MzcwfDA&amp;ixlib=rb-4.0.3" 
-            alt="Generated" 
-            style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px 8px 0px 0px;"
-        >
-        <h2>"Spoil your furry friend with the best!"</h2>
-        <p>"Our premium dog food provides complete nutrition for a healthy and vibrant life. Formulated with high-quality ingredients, it supports optimal growth, energy levels, and a shiny coat. Give your dog the gift of delicious, nutritious meals!"</p>
-        <a 
-            href="#" 
-            style="display: block; width: 200px; margin: 20px auto; padding: 10px; background-color: rgb(255, 99, 71); color: rgb(255, 255, 255); text-align: center; text-decoration: none; border-radius: 5px; font-size: 18px;"
-        >
-            Shop Now
-        </a>
-    </div>
-`;
-
-  const SeperateChildren = (html) => {
-    const children = Array.from(html.childNodes);
-
-    children.forEach((child) => {
-      const seperateGrandChildren = seperateOuterDivToEachChild(child);
-      return seperateGrandChildren;
-    })
-  }
-
-  return (
-    <div className='fullScreen'>
-      {/* <button onClick={() => seperateOuterDivToEachChild(originalHtml)}>asdf</button> */}
-      <header className='header'>Template Generation</header>
-      <div className="mainContainer">
-
-        {/* user input */}
-        <InputSection 
-          setUrlFromShop={setUrlFromShop} 
-          urlForShop={urlForShop} 
-          setResultToDefault={setResultToDefault}
-          handleSendPrompt={handleSendPrompt}
-          prompt={prompt}
-          handleFileChange={handleFileChange}
-          handleRemoveImage={handleRemoveImage}
-        />
-
-        {/* output */}
-        <div className="outputContainer">
-          {
-            (result.image_url || uploadedImage) && (
-            <>
-              <div className="template-container">
-                <Dropdown className="template-options">
-                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                    •••
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleCopyToClipboard('template1')}>
-                      Copy to Gmail
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => sendToEditor("template1")}>
-                      Send to Editor
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <div id="template1">
-                  <Template1 result={{ ...result, image_url: uploadedImage || result.image_url }} />
+    return (
+        <>
+            <div className={`profile_page-main-content ${menuVisible ? 'menu-visible' : ''}`}>
+                <button className="profile_page-menu-toggle-outer" onClick={toggleMenu}>
+                    <i className="fa-solid fa-bars"></i>
+                </button>
+                <h1 style={{ marginLeft: "0.5rem" }}>Template Generation</h1>
+                <form id="brand-kit-form" onSubmit={handleSubmit}>
+                    <div className="profile_page-form-section">
+                        <label htmlFor="logo"><h5>Logo</h5></label>
+                        <img src={logoPreview} alt="Logo Preview" id="logo-preview" />
+                        <input type="file" id="logo" name="logo" accept="image/*" onChange={handleLogoChange} />
+                    </div>
+                </form>
+                <div className="social-links-section">
+                    <h2>Social Links</h2>
+                    <div className="form-group">
+                        <label htmlFor="website">Website</label>
+                        <input type="text" id="website" placeholder="Enter your website URL" onChange={(e) => updateLink({website: e.target.value})} value={links.website}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="instagram">Instagram</label>
+                        <input type="text" id="instagram" placeholder="Enter your Instagram URL" onChange={(e) => updateLink({instagram: e.target.value})} value={links.instagram}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="twitter">Twitter</label>
+                        <input type="text" id="twitter" placeholder="Enter your Twitter URL" onChange={(e) => updateLink({twitter: e.target.value})} value={links.twitter}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="facebook">Facebook</label>
+                        <input type="text" id="facebook" placeholder="Enter your Facebook URL" onChange={(e) => updateLink({facebook: e.target.value})} value={links.facebook}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="linkedin">LinkedIn</label>
+                        <input type="text" id="linkedin" placeholder="Enter your LinkedIn URL"onChange={(e) => updateLink({linkedin: e.target.value})} value={links.linkedin}/>
+                    </div>
                 </div>
-              </div>
-              <div className="template-container">
-                <Dropdown className="template-options">
-                  <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                    •••
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleCopyToClipboard('template2')}>
-                      Copy to Gmail
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => sendToEditor("template2")}>
-                      Send to Editor
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <div id="template2">
-                  <Template2 result={{ ...result, image_url: uploadedImage || result.image_url }} />
+
+            </div>
+            <div className={`profile_page-additional-content ${menuVisible ? 'menu-visible' : ''}`}>
+                <h1 style={{ textAlign: "center" }}>Template Result</h1>
+                <div className="profile_page-result">
+                    {loading ? (
+                        <div className="d-flex justify-content-center align-items-center w-100">
+                            <div className="spinner-grow text-primary" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    ) : result ? (
+                        <div className="template-container">
+                            <div style={{
+                                display: "flex",
+                                gap: "5em",
+                                justifyContent: "center"
+                            }}>
+                                <button className="copy-button" onClick={() => saveToDatabase(isTemplate1 ? "template1" : "template2")}>
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </button>
+                                <button className="copy-button" onClick={() => handleCopyToClipboard(isTemplate1 ? "template1" : "template2")}>
+                                    <i className="fa-solid fa-clipboard"></i>
+                                </button>
+                                <button className="edit-button" onClick={() => sendToEditor(isTemplate1 ? "template1" : "template2")}>
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button className="edit-button" >
+                                    <i
+                                        className={`fa-solid fa-arrow-right toggle-template ${isTemplate1 ? 'rotate-right' : 'rotate-left'}`}
+                                        onClick={toggleTemplate}
+                                        aria-label="Toggle Template"
+                                    ></i>
+                                </button>
+                            </div>
+                            {isTemplate1 ? 
+                            (
+                                <div id="template1">
+                                    <Template1 
+                                        result={result} 
+                                        logo={selectedLogo.base64String !== "" ? `data:${selectedLogo.fileType};base64,${selectedLogo.base64String}` : null} 
+                                        links={links}
+                                    />
+                                </div>
+                            ) : (
+                                <div id="template2">
+                                    <Template2 
+                                        result={result} 
+                                        logo={selectedLogo.base64String !== "" ? `data:${selectedLogo.fileType};base64,${selectedLogo.base64String}` : null} 
+                                        links={links}
+                                    />
+                                </div>
+                            )}
+                    </div>
+                    ) : (
+                        <p>No result to display</p>
+                    )}
                 </div>
-              </div>
-            </>
-            )
-          }
-        </div>
-      </div>
-    </div>
-  );
+            </div>
+            <div className={`prompt-section ${menuVisible ? 'slide-right' : ''}`}>
+                <form id="prompt-form" onSubmit={handlePromptSubmit} className="profile_page-form-with-icon">
+                    <div className="prompt-area">
+                        <div className="textarea-container">
+                            <textarea id="prompt" ref={promptRef} placeholder="Describe the email you'd like to create" />
+                            <button type="submit" className="profile_page-submit-icon" disabled={loading}>
+                                <i className="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="form-feedback" className={formFeedback ? '' : 'profile_page-hidden'}>Submitted successfully!</div>
+                </form>
+            </div>
+        </>
+    )
 }
 
 export default TemplateGeneration;
