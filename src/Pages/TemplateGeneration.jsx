@@ -158,42 +158,40 @@ const TemplateGeneration = ({
     };
 
     const saveToDatabase = async (templateId) => {
-    
-        console.log(loginCredentials)
-    
+        console.log(loginCredentials);
         const extractedHtml = extractHtml(templateId);
         if (extractedHtml === null) {
-        return;
+            return;
         }
     
         try {
-        const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/template`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                user_id: loginCredentials.user_id,
-                template: extractedHtml,
-            }),
-        });
+            const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/template`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: loginCredentials.user_id,
+                    template: extractedHtml,
+                }),
+            });
     
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.log(errorText);
-            throw new Error(`Error: ${errorText}`);
-        }
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to save template:', errorText);
+                alert('Failed to save template. Please try again.');
+                return;
+            }
     
-        const data = await response.json();
-        
-        alert('Successfully added template:', data);
-    
-        navigate('/profile');
+            const data = await response.json();
+            alert('Successfully added template:', data);
+            navigate('/profile');
         } catch (error) {
-
-            alert('Error:', error);
+            console.error('Error:', error);
+            alert('An unexpected error occurred. Please try again.');
         }
-    }
+    };
+    
 
     const toggleTemplate = () => {
         setIsTemplate1(!isTemplate1);
