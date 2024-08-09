@@ -181,6 +181,7 @@ const TemplateGeneration = ({
         if (!response.ok) {
             const errorText = await response.text();
             console.log(errorText);
+            throw new Error(`Error: ${errorText}`);
         }
     
         const data = await response.json();
