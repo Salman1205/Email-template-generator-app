@@ -80,13 +80,36 @@ const TemplateGeneration = ({
 
     const handleCopyToClipboard = (id) => {
         const templateElement = document.getElementById(id);
+        console.log(templateElement);
+    
+        if (!templateElement) {
+            alert("Element not found");
+            return;
+        }
+        
         const range = document.createRange();
         range.selectNode(templateElement);
+
+        // Remove any existing selections
         window.getSelection().removeAllRanges();
+
+        // Add the new range
         window.getSelection().addRange(range);
-        document.execCommand("copy");
-        window.getSelection().removeAllRanges();
-        alert("Template copied to clipboard!");
+        
+        // Execute the copy command
+        try {
+            const successful = document.execCommand("copy");
+            if (successful) {
+                alert("Template copied to clipboard!");
+            } else {
+                alert("Failed to copy template");
+            }
+        } catch (err) {
+            alert("Failed to copy template");
+    }
+
+    // Clear the selection
+    window.getSelection().removeAllRanges();
     };
 
     const extractHtml = (templateId) => {
@@ -158,7 +181,6 @@ const TemplateGeneration = ({
         if (!response.ok) {
             const errorText = await response.text();
             console.log(errorText);
-            throw new Error(`Error: ${errorText}`);
         }
     
         const data = await response.json();
@@ -260,7 +282,7 @@ const TemplateGeneration = ({
                                 <div id="template1">
                                     <Template1 
                                         result={result} 
-                                        logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} 
+                                        logo={selectedLogo.base64String !== "" ? `data:${selectedLogo.fileType};base64,${selectedLogo.base64String}` : null} 
                                         links={links}
                                     />
                                 </div>
@@ -268,7 +290,7 @@ const TemplateGeneration = ({
                                 <div id="template2">
                                     <Template2 
                                         result={result} 
-                                        logo={`data:${selectedLogo.fileType};base64,${selectedLogo.base64String}`} 
+                                        logo={selectedLogo.base64String !== "" ? `data:${selectedLogo.fileType};base64,${selectedLogo.base64String}` : null} 
                                         links={links}
                                     />
                                 </div>
