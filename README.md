@@ -104,15 +104,3 @@ Deploying this project to Vercel is straightforward:
    ```
 
    Follow the prompts to set up your project. Vercel will handle the rest, ensuring your app is live and accessible.
-
-## License
-
-This project is licensed under the MIT License. You can view the [LICENSE](../LICENSE) file for more details.
-
----
-
-Feel free to reach out if you have any questions or suggestions. Your feedback is always appreciated! 
-
----
-
-This version of the README includes a detailed explanation of your code, tech stack, and provides a welcoming and professional tone. Let me know if there’s anything else you’d like to add!
