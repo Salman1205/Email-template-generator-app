@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5fd5eac6.css",
+    "main.js": "/static/js/main.1332aaad.js",
+    "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
+    "static/media/sample.png": "/static/media/sample.1c72ff4485255ca09737.png",
+    "static/media/stayaLogo.jpeg": "/static/media/stayaLogo.fad85003d6cfcf6afd3a.jpeg",
+    "static/media/dummy.jfif": "/static/media/dummy.ad6b7be9b46bc55f0c13.jfif",
+    "index.html": "/index.html",
+    "main.5fd5eac6.css.map": "/static/css/main.5fd5eac6.css.map",
+    "main.1332aaad.js.map": "/static/js/main.1332aaad.js.map",
+    "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5fd5eac6.css",
+    "static/js/main.1332aaad.js"
+  ]
+}
