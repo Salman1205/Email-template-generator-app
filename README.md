@@ -2,7 +2,7 @@ Welcome to the MailFusion! This React-based frontend application is designed to 
 
 ## Live Demo
 
-Check out the live version of the app [here](#).
+Check out the live version of the app [here](https://mail-fusion-create-edit-and-elevate-email-templates.vercel.app/signup).
 
 ## Overview
 
