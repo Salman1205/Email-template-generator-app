@@ -18,7 +18,7 @@ const Login = ({ loginCredentials, setLoginCredentials }) => {
             formData.append('email', email);
             formData.append('password', password);
 
-            const response = await fetch(`${process.env.REACT_APP_LOGIN_SIGNUP_URL}/login`, {
+            const response = await fetch("https://mail-fusion-create-edit-and-elevate-email-templates-jg5i.vercel.app/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
