@@ -1,4 +1,6 @@
-Welcome to the MailFusion! This React-based frontend application is designed to help you create and manage beautiful email templates with ease. The application is hosted on Vercel, ensuring fast and reliable access.
+# MailFusion - Create, Edit, and Elevate Email Templates
+
+Welcome to MailFusion! This repository houses both the frontend and backend components of our application, designed to help you create, manage, and elevate beautiful email templates with ease. 
 
 ## Live Demo
 
@@ -6,7 +8,7 @@ Check out the live version of the app [here](https://mail-fusion-create-edit-and
 
 ## Overview
 
-MailFusion is built with a focus on providing an intuitive user experience while leveraging modern web development technologies. The frontend handles the user interface, where users can input their preferences, generate templates, and manage saved designs.
+MailFusion is a comprehensive email template generation platform. The backend is built with Flask and handles user authentication, template generation, and data management. The frontend, built with React, provides an intuitive user interface for interacting with the backend services.
 
 ## Table of Contents
 
@@ -15,40 +17,94 @@ MailFusion is built with a focus on providing an intuitive user experience while
 - [Installation](#installation)
 - [Project Structure](#project-structure)
 - [Available Scripts](#available-scripts)
+- [Available Routes](#available-routes)
+- [Environment Variables](#environment-variables)
+- [Running the Application](#running-the-application)
 - [Deployment](#deployment)
-- [License](#license)
 
 ## Tech Stack
 
-This project uses a variety of technologies to create a robust and dynamic web application:
+### Backend
 
-- **React**: The core library for building user interfaces.
-- **React Router**: For handling navigation and routing within the app.
-- **Axios**: Used for making HTTP requests to the backend API.
-- **Styled Components**: For writing CSS that's scoped to individual components.
-- **Vercel**: For hosting and deploying the application seamlessly.
+- **Flask**: Lightweight WSGI web application framework in Python.
+- **Flask-SQLAlchemy**: ORM for interacting with the database.
+- **Flask-JWT-Extended**: Handles JWT for secure user authentication.
+- **Azure SQL Database**: Database for storing user and template data.
+- **Gunicorn**: WSGI HTTP server for UNIX.
+- **Docker**: Optional containerization.
+- **Gemini API**: For advanced AI text generation.
+- **Unsplash API**: For fetching high-quality images.
+
+### Frontend
+
+- **React**: Core library for building user interfaces.
+- **React Router**: Handles navigation and routing.
+- **Axios**: For making HTTP requests.
+- **Styled Components**: For scoped component-level styling.
+- **Vercel**: Hosting and deployment.
 
 ## Code Explanation
 
-The frontend is designed to be modular, with each component handling a specific part of the user interface. Here’s a brief overview of how the code is organized:
+### Backend
 
-- **Components**: Each feature or section of the app is encapsulated within its own component, making the code easy to maintain and extend. For example, the `TemplateForm` component handles the form where users input their template details, while the `TemplateList` component displays a list of saved templates.
+- **Routes**: Defined in `app.py`, handling user login, signup, and template management.
+- **Authentication**: Managed with JWT tokens.
+- **Template Generation**: Uses Gemini API for generating email content.
+- **Image Integration**: Uses Unsplash API for fetching images.
+- **Database Models**: Defined in `models.py` with SQLAlchemy.
 
-- **State Management**: We use React's `useState` and `useEffect` hooks to manage local state within components, ensuring that the app responds to user interactions in real-time.
+### Frontend
 
-- **API Integration**: Axios is used to communicate with the backend API, sending requests to generate new templates, save them, or fetch saved templates for the user.
-
-- **Styling**: Styled Components allow us to write CSS directly in our JavaScript files, scoping styles to specific components and ensuring that our design is consistent and modular.
+- **Components**: Modular components for UI features (e.g., `TemplateForm`, `TemplateList`).
+- **State Management**: Uses React hooks (`useState`, `useEffect`).
+- **API Integration**: Axios for communication with backend APIs.
+- **Styling**: Scoped using Styled Components.
 
 ## Installation
 
-To get started with this project locally:
+### Backend
 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/EmailTemplateGenerator.git
-   cd EmailTemplateGenerator/template-generation-main
+   git clone https://github.com/yourusername/MailFusion-Create-Edit-and-Elevate-Email-Templates.git
+   cd MailFusion-Create-Edit-and-Elevate-Email-Templates/backend
+   ```
+
+2. **Set up a virtual environment:**
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+3. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up environment variables:**
+
+   Create a `.env` file in the root directory with the following variables:
+
+   ```bash
+   FLASK_APP=app.py
+   FLASK_ENV=development
+   SECRET_KEY=your_secret_key
+   JWT_SECRET_KEY=your_jwt_secret_key
+   SQLALCHEMY_DATABASE_URI=sqlite:///db.sqlite3  # Or your preferred database
+   GEMINI_API_KEY=your_gemini_api_key
+   UNSPLASH_API_KEY=your_unsplash_api_key
+   ```
+
+### Frontend
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/MailFusion-Create-Edit-and-Elevate-Email-Templates.git
+   cd MailFusion-Create-Edit-and-Elevate-Email-Templates/frontend
    ```
 
 2. **Install dependencies:**
@@ -69,38 +125,68 @@ To get started with this project locally:
 
 ## Project Structure
 
-Here’s a quick rundown of the key directories and files in the project:
+### Backend
 
-- **`src/`**: Contains all the React components, pages, and styles.
+- **`app.py`**: Main application file with routes and setup.
+- **`models.py`**: SQLAlchemy models.
+- **`config.py`**: Configuration file.
+- **`templates/`**: HTML templates.
+- **`static/`**: Static files.
+
+### Frontend
+
+- **`src/`**: Contains React components, pages, and styles.
   - **`components/`**: Reusable UI components.
-  - **`pages/`**: Different pages of the application (e.g., Home, Login, Dashboard).
-  - **`styles/`**: Global styles and theme settings.
-- **`public/`**: Static files like `index.html` and images.
-- **`build/`**: The production-ready version of the app.
+  - **`pages/`**: Different pages (e.g., Home, Login, Dashboard).
+  - **`styles/`**: Global styles.
+- **`public/`**: Static files.
+- **`build/`**: Production-ready version of the app.
 - **`.env`**: Configuration for environment variables.
 
 ## Available Scripts
 
-In the project directory, you can run:
+### Backend
 
-- **`npm start`**: Starts the app in development mode.
-- **`npm run build`**: Builds the app for production, optimizing the output for best performance.
-- **`npm test`**: Runs the test suite to ensure that everything works as expected.
+- **`flask run`**: Starts the Flask application.
+
+### Frontend
+
+- **`npm start`**: Starts the React app in development mode.
+- **`npm run build`**: Builds the app for production.
+- **`npm test`**: Runs the test suite.
+
+## Available Routes
+
+- **`/login`**: POST - Authenticates a user and returns a JWT token.
+- **`/signup`**: POST - Registers a new user.
+- **`/query`**: POST - Handles email template generation requests.
+- **`/save-template`**: POST - Saves a generated email template.
+- **`/templates`**: GET - Retrieves saved templates.
+
+## Environment Variables
+
+Ensure the following environment variables are set:
+
+- **Backend**
+  - `FLASK_APP`
+  - `FLASK_ENV`
+  - `SECRET_KEY`
+  - `JWT_SECRET_KEY`
+  - `SQLALCHEMY_DATABASE_URI`
+  - `GEMINI_API_KEY`
+  - `UNSPLASH_API_KEY`
+
+- **Frontend**
+  - `REACT_APP_BACKEND_URL`: The URL of the backend API.
+
+## Running the Application
+
+- **Backend**: Use `flask run` to start the backend server.
+- **Frontend**: Use `npm start` to start the React app.
 
 ## Deployment
 
-Deploying this project to Vercel is straightforward:
+- **Backend**: Deploy using Gunicorn, Heroku, or Docker.
+- **Frontend**: Deploy to Vercel with the Vercel CLI.
 
-1. Install the Vercel CLI if you haven’t already:
-
-   ```bash
-   npm install -g vercel
-   ```
-
-2. Deploy the app with:
-
-   ```bash
-   vercel
-   ```
-
-   Follow the prompts to set up your project. Vercel will handle the rest, ensuring your app is live and accessible.
+---
