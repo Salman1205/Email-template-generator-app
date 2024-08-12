@@ -127,21 +127,16 @@ MailFusion is a comprehensive email template generation platform. The backend is
 
 ### Backend
 
-- **`app.py`**: Main application file with routes and setup.
-- **`models.py`**: SQLAlchemy models.
-- **`config.py`**: Configuration file.
-- **`templates/`**: HTML templates.
-- **`static/`**: Static files.
+- **`app.py`**: The main application file containing the routes and application setup.
 
 ### Frontend
 
-- **`src/`**: Contains React components, pages, and styles.
+- **`src/`**: Contains all the React components, pages, and styles.
   - **`components/`**: Reusable UI components.
-  - **`pages/`**: Different pages (e.g., Home, Login, Dashboard).
-  - **`styles/`**: Global styles.
-- **`public/`**: Static files.
-- **`build/`**: Production-ready version of the app.
-- **`.env`**: Configuration for environment variables.
+  - **`pages/`**: Different pages of the application (e.g., Home, Login, Dashboard).
+  - **`CSS/`**: Global styles and theme settings.
+- **`public/`**: Static files like `index.html` and images.
+- **`build/`**: The production-ready version of the app.
 
 ## Available Scripts
 
@@ -186,7 +181,5 @@ Ensure the following environment variables are set:
 
 ## Deployment
 
-- **Backend**: Deploy using Gunicorn, Heroku, or Docker.
+- **Backend**: Deploy using Vercel,Gunicorn, Heroku, or Docker.
 - **Frontend**: Deploy to Vercel with the Vercel CLI.
-
----
